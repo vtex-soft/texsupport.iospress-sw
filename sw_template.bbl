@@ -1,0 +1,103 @@
+\begin{thebibliography}{5}
+% BibTex style file: ios1.bst, 2017-01-04
+\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
+\ifx \binits  \undefined \def \binits#1{#1} \fi
+\ifx \bauthor  \undefined \def \bauthor#1{#1} \fi
+\ifx \bjtitle  \undefined \def \bjtitle#1{\textit{#1}}\fi
+\ifx \batitle  \undefined \def \batitle#1{#1} \fi
+\ifx \bctitle  \undefined \def \bctitle#1{#1} \fi
+\ifx \bvolume  \undefined \def \bvolume#1{\textbf{#1}}\fi
+\ifx \byear  \undefined \def \byear#1{#1} \fi
+\ifx \bissue  \undefined \def \bissue#1{#1} \fi
+\ifx \bfpage  \undefined \def \bfpage#1{#1} \fi
+\ifx \blpage  \undefined \def \blpage #1{#1} \fi
+\ifx \burl  \undefined \def \burl#1{#1} \fi
+\ifx \doiurl  \undefined \def \doiurl#1{#1} \fi
+\ifx \betal  \undefined \def \betal{et al.} \fi
+\ifx \binstitute  \undefined \def \binstitute#1{#1} \fi
+\ifx \beditor  \undefined \def \beditor#1{#1} \fi
+\ifx \bpublisher  \undefined \def \bpublisher#1{#1} \fi
+\ifx \bbtitle  \undefined \def \bbtitle#1{\textit{#1}} \fi
+\ifx \bedition  \undefined \def \bedition#1{#1} \fi
+\ifx \bseriesno  \undefined \def \bseriesno#1{#1} \fi
+\ifx \blocation  \undefined \def \blocation#1{#1} \fi
+\ifx \bsertitle  \undefined \def \bsertitle#1{#1} \fi
+\ifx \bsnm \undefined \def \bsnm#1{#1} \fi
+\ifx \bsuffix \undefined \def \bsuffix#1{#1} \fi
+\ifx \bparticle \undefined \def \bparticle#1{#1} \fi
+\ifx \barticle \undefined \def \barticle#1{#1} \fi
+\ifx \botherref \undefined \def \botherref #1{#1} \fi
+\ifx \url \undefined \def \url#1{#1} \fi
+\ifx \bchapter \undefined \def \bchapter#1{#1} \fi
+\ifx \bbook \undefined \def \bbook#1{#1} \fi
+\ifx \bcomment \undefined \def \bcomment#1{#1} \fi
+\ifx \oauthor \undefined \def \oauthor#1{#1} \fi
+\ifx \citeauthoryear \undefined \def \citeauthoryear#1{#1} \fi
+\ifx \texttildelow  \undefined \def \texttildelow{\symbol{126}} \fi
+\def \endbibitem {}
+\ifx \bconflocation  \undefined \def \bconflocation#1{#1} \fi
+
+\bibitem{hankeknees}
+\begin{barticle}
+\bauthor{\binits{H.}~\bsnm{Hanke}} and
+\bauthor{\binits{D.}~\bsnm{Knees}},
+\batitle{A phase-field damage model based on evolving microstructure},
+\bjtitle{Asymptotic Analysis}
+\bvolume{101}
+(\byear{2017}),
+\bfpage{149}--\blpage{180}.
+\end{barticle}
+\endbibitem
+
+\bibitem{lefever}
+\begin{barticle}
+\bauthor{\binits{E.}~\bsnm{Lefever}},
+\batitle{A hybrid approach to domain-independent taxonomy learning},
+\bjtitle{Applied Ontology}
+\bvolume{11}(\bissue{3})
+(\byear{2016}),
+\bfpage{255}--\blpage{278}.
+\end{barticle}
+\endbibitem
+
+\bibitem{meltzeretal}
+\begin{bchapter}
+\bauthor{\binits{P.S.}~\bsnm{Meltzer}},
+\bauthor{\binits{A.}~\bsnm{Kallioniemi}} and
+\bauthor{\binits{J.M.}~\bsnm{Trent}},
+\bctitle{Chromosome alterations in human solid tumors},
+in: \bbtitle{The Genetic Basis of Human Cancer},
+\beditor{\binits{B.}~\bsnm{Vogelstein}} and
+\beditor{\binits{K.W.}~\bsnm{Kinzler}}, eds,
+\bpublisher{McGraw-Hill},
+\blocation{New York},
+\byear{2002},
+pp.~\bfpage{93}--\blpage{113}.
+\end{bchapter}
+\endbibitem
+
+\bibitem{murrayetal}
+\begin{bbook}
+\bauthor{\binits{P.R.}~\bsnm{Murray}},
+\bauthor{\binits{K.S.}~\bsnm{Rosenthal}},
+\bauthor{\binits{G.S.}~\bsnm{Kobayashi}} and
+\bauthor{\binits{M.A.}~\bsnm{Pfaller}},
+\bbtitle{Medical Microbiology},
+\bedition{4th} edn,
+\bpublisher{Mosby},
+\blocation{St. Louis},
+\byear{2002}.
+\end{bbook}
+\endbibitem
+
+\bibitem{wilson}
+\begin{botherref}
+\oauthor{\binits{E.}~\bsnm{Wilson}},
+Active vibration analysis of thin-walled beams,
+PhD thesis,
+University of Virginia,
+1991.
+\end{botherref}
+\endbibitem
+
+\end{thebibliography}
