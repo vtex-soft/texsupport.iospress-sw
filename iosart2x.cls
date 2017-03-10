@@ -11,6 +11,7 @@
 %%   Biorheology (BIR)
 %%   Bio-Medical Materials and Engineering (BME)
 %%   Biomedical Spectroscopy and Imaging (BSI)
+%%   Data Science (DS)
 %%   Information Services &  Use (ISU)
 %%   Journal of Computer Security (JCS)
 %%   Journal of High Speed Networks (JHS)
@@ -56,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/02/20}
-\def\fmt@version{1.1.2}
+\def\fmt@date{2017/03/10}
+\def\fmt@version{1.1.3}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -165,6 +166,7 @@
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
+  \gdef\@open@access@control{1}%
 }
 
 \DeclareOption{ao}{%
@@ -228,6 +230,21 @@
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
+}
+
+\DeclareOption{ds}{%
+  \gdef\@jid{ds}
+  \gdef\@JID{DS}
+  \gdef\@issn{2451-8484}
+  \gdef\@eissn{2451-8492}%
+  %\gdef\@price{35.00}%
+  \gdef\@journal{Data Science}%
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \gdef\@open@access@control{1}%
+  \gdef\license@type{CC@BY}%
+  \gdef\copyright@type{short}%
 }
 
 \DeclareOption{isu}{%
@@ -424,6 +441,14 @@
 \def\dbl@error#1{\@latex@error{#1}\@ehc\special{mt:error #1}}
 
 %************************* LAYOUTS
+\def\common@layout@settings{%
+  % math
+  \let\ge\geqslant
+  \let\geq\geqslant
+  \let\le\leqslant
+  \let\leq\leqslant
+  \renewcommand{\Bigg}{\bBigg@{2.6}}%
+  }
 
 \def\common@settings@from@ios@two@a{%
   % math
@@ -431,12 +456,7 @@
   \def\dfrac##1##2{{\displaystyle\frac{##1}{##2}}}
   \def\dvt{\colon\ }
   \def\dvtx{\nobreak\,\colon\relax}
-  \let\ge\geqslant
-  \let\geq\geqslant
-  \let\le\leqslant
-  \let\leq\leqslant
   \AtEndOfClass{\mathindent2em}
-  \renewcommand{\Bigg}{\bBigg@{2.6}}
   % fonts
   \let\rtitleheadline@size\footnotesize
   % title
@@ -649,15 +669,15 @@
   }
 }% end of 4th layout
 
+\ifdefined\@open@access@control
+  \AtBeginDocument{\mandatory@open@access@option@error}%
+\fi
+
 \def\init@ios@journal@INF@settings{
   \def\theaddress{\arabic{address}}
   \def\@@copyrightowner{Vilnius University}
   \def\@publisher{Vilnius University Institute of Mathematics and Informatics}
   \def\@publisheraddress{Akademijos 4, LT-08663 Vilnius, Lithuania}
-}
-
-\def\init@ios@journal@AAC@settings{%
-  \AtBeginDocument{\mandatory@open@access@option@error}%
 }
 
 \def\init@ios@journal@ASY@settings{%
@@ -1082,9 +1102,7 @@
 \@publisher}
 \let\ltitleheadline\rtitleheadline
 
-\def\@copyright{%
-  \if@open@access\mbox{\rlap{\raisebox{-1.5\baselineskip}[\z@][\z@]{\vtop{%
-  \fontsize{7.9}\baselineskip\selectfont%
+\def\CC@BY@NC@license@text{%
   \ifnum\jobstart@date@info>20160706\relax
     This article is published online with Open Access and distributed under
     the terms of the Creative Commons Attribution Non-Commercial Li%
@@ -1097,9 +1115,48 @@
     This article is published online with Open Access and distributed under 
     the terms of the Creative Commons Attribution Non-Commercial License.%
   \fi
-  }}}}\fi%
+  }
+\def\CC@BY@license@text{%
+  This article is published online with Open Access
+  and distributed under the terms of the Creative Commons Attribution License (CC BY 4.0).%
+  }
+\def\license@text{%
+  \ifdefined\license@type
+  \else
+    \def\license@type{CC@BY@NC}%
+  \fi
+  \csname\license@type @license@text\endcsname
+  }
+\def\standard@copyright@line{%
   \@issn/\the@copyearfrom\the@copyear/\$\@price\ \copyright@sign\
-  \@pubyearfrom@fmt\the\@pubyear\@copyrightowner}%
+  \@pubyearfrom@fmt\the\@pubyear\@copyrightowner
+  }
+\def\short@copyright@line{%
+  \@issn\ \copyright@sign\
+  \@pubyearfrom@fmt\the\@pubyear\@copyrightowner
+  }
+\def\copyright@line{%
+  \ifdefined\copyright@type
+  \else
+    \def\copyright@type{standard}%
+  \fi
+  \csname\copyright@type @copyright@line\endcsname
+  }
+\def\@copyright{%
+  \if@open@access
+    \mbox{%
+      \rlap{%
+        \raisebox{-1.5\baselineskip}[\z@][\z@]{%
+          \vtop{%
+            \fontsize{7.9}\baselineskip\selectfont%
+            \license@text
+            }%
+          }%
+        }%
+      }%
+  \fi%
+  \copyright@line
+  }%
 
 % ************************ FOOTNOTE
 % footnoterule
@@ -2924,6 +2981,7 @@
 % cases displaystyle
 \@ifversionge{101}{}{\gpreto\env@cases{\everymath{\displaystyle}}}
 
+\common@layout@settings
 \@nameuse{init@ios@journal@\ios@journal@layout @layout}
 \@nameuse{init@ios@journal@\@JID @settings}
 
