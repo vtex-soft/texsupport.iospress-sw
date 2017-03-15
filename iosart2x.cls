@@ -57,7 +57,7 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/03/10}
+\def\fmt@date{2017/03/15}
 \def\fmt@version{1.1.3}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
@@ -2461,6 +2461,8 @@
 
 \csuse{\fmt@name @load@printead}
 \appto\before@printead@hook{\def\ead@prefix@m@phone{Tels}}
+\def\orcid@value@prefix{http://orcid.org/}
+\def\orcid@value@output#1{\orcid@value@prefix #1}
 
 \def\ead@href#1#2{\href{#1}{#2}}%
 \appto\@setead@hook{%
