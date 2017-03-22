@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/03/15}
-\def\fmt@version{1.1.3}
+\def\fmt@date{2017/03/22}
+\def\fmt@version{1.1.4}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -1798,26 +1798,8 @@
 \fi
 
 %***************************** BIBLIOGRAPHY
-
-\def\biblio@clubpenalty{4000}
-\def\biblio@widowpenalty{4000}
-\newenvironment{thebibliography}[1]
-     {\section*{\refname}\footnotesize\rmfamily\upshape%
-      \list{\@biblabel{\@arabic\c@enumiv}}%
-           {\settowidth\labelwidth{\@biblabel{#1}}%
-            \leftmargin\labelwidth
-            \advance\leftmargin\labelsep
-            \usecounter{enumiv}%
-            \let\p@enumiv\@empty
-            \renewcommand\theenumiv{\@arabic\c@enumiv}}%
-      \sloppy
-      \clubpenalty\biblio@clubpenalty
-      \@clubpenalty \clubpenalty
-      \widowpenalty\biblio@widowpenalty%
-      \sfcode`\.\@m}
-     {\def\@noitemerr
-       {\ClassWarning{iosart2x}{Empty `thebibliography' environment}}%
-      \endlist}
+\newenvironment{thebibliography}
+  {}{}
 
 \newcommand\newblock{\hskip .11em\@plus.33em\@minus.07em}
 
@@ -1838,7 +1820,17 @@
 \csuse{\fmt@name @natbib@numbers}
 \fi% end numbers
 
-\let\bibfont\footnotesize
+\csuse{\fmt@name @natbib@setup}
+\ifnum\jobstart@date@info>20170322\relax
+  \long\def\bibfont{%
+    \footnotesize
+    \edef\orig@baselineskip{\the\baselineskip}%
+    \baselineskip\orig@baselineskip\@plus.5\p@
+    }
+  \bibsep\z@\@plus.5\p@
+\else
+  \let\bibfont\footnotesize
+\fi
 
 \let\endbibitem\relax
 %\def\hybrsp{ }
@@ -3107,9 +3099,9 @@
 \csuse{\fmt@name @load@splitdoi}
 
 \@ifversionge{112}
-  {\let\bid\bbl@bid
-   \csuse{\fmt@name @112@btpdefs}}
+  {\let\bid\bbl@bid}
   {}
+\csuse{\fmt@name @bptdefs}
 
 \let\bid@doi@space\relax
 \def\bid@doi@sep{:}
