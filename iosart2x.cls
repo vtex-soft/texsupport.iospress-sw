@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/03/22}
-\def\fmt@version{1.1.4}
+\def\fmt@date{2017/03/24}
+\def\fmt@version{1.1.6}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -393,6 +393,17 @@
   \gdef\@eissn{1822-8844}%
   \gdef\@price{35.00}%
   \gdef\@journal{Informatica}%
+  \global\@twocolumntrue
+  \gdef\ios@journal@layout{0}%
+}
+
+\DeclareOption{nre}{%
+  \gdef\@jid{nre}%
+  \gdef\@JID{NRE}%
+  \gdef\@issn{1053-8135}%
+  \gdef\@eissn{1878-6448}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{NeuroRehabilitation}%
   \global\@twocolumntrue
   \gdef\ios@journal@layout{0}%
 }
