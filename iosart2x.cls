@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/03/24}
-\def\fmt@version{1.1.6}
+\def\fmt@date{2017/03/29}
+\def\fmt@version{1.1.7}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -1641,13 +1641,22 @@
 \let\tablebr\break
 
 \newenvironment{table}
-               {\let\@makecaption\@maketablecaption%
-               \let\@floatboxreset\@tableboxreset\@float{table}}
-               {\end@float}
+  {%
+    \let\@makecaption\@maketablecaption
+    \let\@floatboxreset\@tableboxreset
+    \@float{table}%
+  }{%
+    \end@float
+  }
 \newenvironment{table*}
-               {\let\@makecaption\@maketablecaption%
-               \let\@floatboxreset\@tableboxreset\@dblfloat{table}}
-               {\end@dblfloat}
+  {%
+    \tablewidth=\textwidth
+    \let\@makecaption\@maketablecaption%
+    \let\@floatboxreset\@tableboxreset
+    \@dblfloat{table}%
+  }{%
+    \end@dblfloat
+  }
 
 \def\@tableboxreset{%
         \reset@font%
@@ -1663,16 +1672,27 @@
 \setlength\belowcaptionskip{3\p@}
 
 \newdimen\tablewidth \tablewidth\textwidth
-\newdimen\saved@tablewidth \saved@tablewidth\textwidth
-
-\long\def\@maketablecaption#1#2{\begingroup\footnotesize
- \global\setbox\@tempboxa\hbox{#2}\endgroup\centering
- \hbox to \hsize{\footnotesize\hss#1\hss}\par
- \ifdim \wd\@tempboxa>\tablewidth \parbox[t]{\tablewidth}{\footnotesize%
- \mbox{}#2\vphantom{Ay}\par} \else
- \hbox to\hsize{\hfill\box\@tempboxa\vphantom{Ay}\hfill}\fi%
- \global\saved@tablewidth\tablewidth%
- \global\tablewidth\hsize\vskip\belowcaptionskip}
+\long\def\@maketablecaption#1#2{%
+  \begingroup
+    \footnotesize
+    \global\setbox\@tempboxa\hbox{#2}%
+  \endgroup
+  \centering
+  \hbox to \hsize{\footnotesize\hss#1\hss}%
+  \par
+  \ifdim\wd\@tempboxa>\tablewidth
+    \parbox[t]{\tablewidth}{%
+      \footnotesize
+      \mbox{}%
+      #2%
+      \vphantom{Ay}%
+      \par
+      }%
+  \else
+    \hbox to\hsize{\hfill\box\@tempboxa\vphantom{Ay}\hfill}%
+  \fi
+  \vskip\belowcaptionskip
+  }
 
 \csuse{\fmt@name @load@tabnotes}
 
@@ -1680,28 +1700,42 @@
 \if@rotating@loaded
 
 \newenvironment{local@sidewaysfigure}
-               {\let\@makecaption\@makefigurecaption
-                \let\@floatboxreset\@figureboxreset
-                \@rotfloat{figure}}
-               {\end@rotfloat}
+  {%
+    \let\@makecaption\@makefigurecaption
+    \let\@floatboxreset\@figureboxreset
+    \@rotfloat{figure}%
+  }{%
+    \end@rotfloat
+  }
 
 \newenvironment{local@sidewaysfigure@star}
-               {\let\@makecaption\@makefigurecaption
-                \let\@floatboxreset\@figureboxreset
-                \@rotdblfloat{figure}}
-               {\end@rotdblfloat}
+  {%
+    \let\@makecaption\@makefigurecaption
+    \let\@floatboxreset\@figureboxreset
+    \@rotdblfloat{figure}%
+  }{%
+    \end@rotdblfloat
+  }
 
 \newenvironment{local@sidewaystable}
-               {\let\@makecaption\@maketablecaption
-                \let\@floatboxreset\@tableboxreset
-               \@rotfloat{table}}
-               {\end@rotfloat}
+  {%
+    \tablewidth=\textheight
+    \let\@makecaption\@maketablecaption
+    \let\@floatboxreset\@tableboxreset
+    \@rotfloat{table}%
+  }{%
+    \end@rotfloat
+  }
 
 \newenvironment{local@sidewaystable@star}
-               {\let\@makecaption\@maketablecaption
-                \let\@floatboxreset\@tableboxreset
-               \@rotdblfloat{table}}
-               {\end@rotdblfloat}
+  {%
+    \tablewidth=\textheight
+    \let\@makecaption\@maketablecaption
+    \let\@floatboxreset\@tableboxreset
+    \@rotdblfloat{table}%
+  }{%
+    \end@rotdblfloat
+  }
 
 \AtEndOfClass{%
   \def\sidewaysfigure{\local@sidewaysfigure}%
