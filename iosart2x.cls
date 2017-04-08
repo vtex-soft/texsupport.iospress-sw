@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/03/29}
-\def\fmt@version{1.1.7}
+\def\fmt@date{2017/04/06}
+\def\fmt@version{1.1.10}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -707,6 +707,10 @@
     \let\ead@prefix@m@email\relax
     \let\ead@prefix@m@phone\relax
     }%
+  }
+
+\def\init@ios@journal@DS@settings{%
+  \def\bisbn##1{\href{http://www.isbnsearch.org/isbn/##1}{##1}}%
   }
 
 %************************* FONTS
@@ -2383,6 +2387,9 @@
   \let\inits\@firstofone
   \let\snm\@firstofone
   \let\suffix\@firstofone
+  \let\ead@prefix@orcid\relax
+  \let\ead@prefix@m@orcid\relax
+  \def\orcid@output@fmt##1{(##1)}%
   \def\address##1{\unskip, ##1}%
   #1}\ignorespaces}%
 
@@ -2466,7 +2473,11 @@
   \authors@size\raggedright
   \leavevmode}
 
-\def\and{\unskip~and~}
+\ifnum\jobstart@date@info>20170330\relax
+  \def\and{\unskip\ and }
+\else
+  \def\and{\unskip~and~}
+\fi
 
 \def\author@note@fmt{%
   \def\thefootnote{\sxarabic{footnote}}}
@@ -3193,6 +3204,13 @@
       \crcr
   }
 \let\gathered\ios@gathered
+
+%% >>> book-review >>>
+\newenvironment{product}
+  {}{}
+\def\bpages#1{#1}
+\def\bprice#1{#1}
+%% <<< book-review <<<
 
 \endinput
 %%
