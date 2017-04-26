@@ -1073,11 +1073,11 @@ FUNCTION {format.series}
     {""} 
     { #0 bother =
         {booktitle empty$	
-                {"\textit{" series title.case * "}" *}
-                {series title.case}
+                {"\textit{" series * "}" *}
+                {series}
          if$			 
         }
-        {"\bsertitle{" series title.case * "}" * }
+        {"\bsertitle{" series * "}" * }
       if$
     }
   if$
@@ -1087,10 +1087,10 @@ FUNCTION {format.ser.vol}
 { series empty$
     'skip$ 
     { #0 bother =
-        {"in \textit{" series title.case * "}" * output}
+        {"in \textit{" series * "}" * output}
         {booktitle empty$
-                {"in \bbtitle{" series title.case * "}" * output}
-                {"in \bsertitle{" series title.case * "}" * output}
+                {"in \bbtitle{" series * "}" * output}
+                {"in \bsertitle{" series * "}" * output}
          if$		
         }
       if$
@@ -1386,7 +1386,7 @@ FUNCTION {format.in.ed.booktitle}
       if$	
       format.middle.editors 
     }
-    {"in: " booktitle title.case "btitle" make.tag * output
+    {"in: " booktitle "btitle" make.tag * output
         series empty$ 
             {volume empty$
                 'skip$
@@ -1423,7 +1423,7 @@ FUNCTION {format.in.ed}
                 series empty$
                         'skip$
                 { 
-                    "in: "	series title.case "btitle" make.tag * output
+                    "in: "	series "btitle" make.tag * output
                     volume empty$
                         'skip$
                         {insert.comma format.volume output}
@@ -1705,10 +1705,10 @@ FUNCTION {article}
   if$
   begin.element
   author.or.editor
-  format.title "t" change.case$ "atitle" make.tag output
+  format.title  "atitle" make.tag output
   journal empty$
       'skip$
-  {insert.comma journal title.case "jtitle" make.tag output}
+  {insert.comma journal  "jtitle" make.tag output}
   if$
   volume empty$
   'skip$
@@ -1770,7 +1770,7 @@ FUNCTION {book}
     {
       title empty$
         'skip$
-        {format.title title.case "btitle" make.tag "title" output.check}
+        {format.title  "btitle" make.tag "title" output.check}
       if$
     }
     {format.title output}
@@ -1828,7 +1828,7 @@ FUNCTION {incollection}
   if$	
   begin.element
   author.or.editor
-  format.title "t" change.case$ "ctitle" make.tag "title" output.check
+  format.title  "ctitle" make.tag "title" output.check
   title empty$ 
     'skip$
     {insert.comma}
@@ -2354,7 +2354,7 @@ REVERSE {reverse.pass}
 
 FUNCTION {write.preambule}
 { "\begin{thebibliography}{" number.label int.to.str$ * "}" * write$ newline$
-    "% BibTex style file: ios1.bst, 2017-01-04" write$ newline$
+    "% BibTex style file: ios1.bst, 2017-04-26" write$ newline$
     "\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi" write$ newline$
     "\ifx \binits  \undefined \def \binits#1{#1} \fi" write$ newline$
     "\ifx \bauthor  \undefined \def \bauthor#1{#1} \fi" write$ newline$
