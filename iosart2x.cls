@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/04/24}
-\def\fmt@version{1.1.12}
+\def\fmt@date{2017/05/26}
+\def\fmt@version{1.1.13}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -684,17 +684,9 @@
   \AtBeginDocument{\mandatory@open@access@option@error}%
 \fi
 
-\def\init@ios@journal@INF@settings{
-  \def\theaddress{\arabic{address}}
-  \def\@@copyrightowner{Vilnius University}
-  \def\@publisher{Vilnius University Institute of Mathematics and Informatics}
-  \def\@publisheraddress{Akademijos 4, LT-08663 Vilnius, Lithuania}
-}
-
 \def\init@ios@journal@ASY@settings{%
   \gappto\@articletype@prehook{\global\let\ios@pages@trimbox\ios@pages@trimbox@asy}%
-}
-
+  }
 \def\init@ios@journal@COM@settings{%
   \appto\before@printead@hook{%
     \let\ead@prefixsep\relax
@@ -708,11 +700,22 @@
     \let\ead@prefix@m@phone\relax
     }%
   }
-
 \def\init@ios@journal@DS@settings{%
   \def\bisbn##1{\href{http://www.isbnsearch.org/isbn/##1}{##1}}%
   \let\review\dsreview
   \let\endreview\enddsreview
+  }
+\def\init@ios@journal@INF@settings{
+  \def\theaddress{\arabic{address}}
+  \def\@@copyrightowner{Vilnius University}
+  \def\@publisher{Vilnius University Institute of Mathematics and Informatics}
+  \def\@publisheraddress{Akademijos 4, LT-08663 Vilnius, Lithuania}
+  }
+\def\init@ios@journal@SW@settings{%
+  \ifnum\jobstart@date@info>20170523\relax
+    \b@author@skip=-2\p@
+    \dsreview@postskip=6\p@
+  \fi
   }
 
 %************************* FONTS
@@ -2165,7 +2168,12 @@
     \gdef\@pagerange{\special@supplement@letter\thefirstpage--\special@supplement@letter\thelastpage}
   \fi
   \thispagestyle{copyright}%
-  \if@preface \else\if@history \history@fmt\fi\fi
+  \if@preface
+  \else
+    \if@history
+      \history@fmt
+    \fi
+  \fi
   \newcount\c@sv@footnote
   \global\c@sv@footnote=\c@footnote
   \if@twocolumn\else\output@glob@notes\fi
@@ -2436,6 +2444,7 @@
 
 \newtoks\dsreview@toks
 \newdimen\dsreview@preskip \dsreview@preskip=15.5\p@
+\newdimen\dsreview@postskip \dsreview@postskip=12\p@
 \def\count@reviewers#1{%
   \setcounter{reviewauthor}{0}%
   \setbox\z@=\vbox{#1}%
@@ -2452,7 +2461,7 @@
       \ifnum\c@review=\z@
         \vskip\dsreview@preskip
       \else
-        \vskip-\a@title@skip
+        \vskip-\dsreview@postskip
       \fi
       \stepcounter{review}%
       \@nameuse{ds@review@#1@settings}%
@@ -2463,7 +2472,7 @@
       \the\dsreview@toks
       \global\dsreview@toks{}%
       \par
-      \vskip\a@title@skip
+      \vskip\dsreview@postskip
       \csname end@dsreview@hook\endcsname
       \end{#3}%
       }%
@@ -2475,6 +2484,10 @@
   \fi
   \@next@
   }
+\ifnum\jobstart@date@info>20170523\relax
+  \let\review\dsreview
+  \let\endreview\enddsreview
+\fi
   
 \@ifundefined{short@journal}{\let\short@journal\@jid}{}
 
