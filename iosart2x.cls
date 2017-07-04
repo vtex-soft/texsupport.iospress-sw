@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/05/26}
-\def\fmt@version{1.1.13}
+\def\fmt@date{2017/07/04}
+\def\fmt@version{1.1.14}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -2392,7 +2392,7 @@
 \def\reviewname@fmt#1{\noindent\textbf{#1:}}
 \def\review@size{\normalfont\footnotesize}
 
-\def\review@author#1{{%
+\def\reviewer#1{{%
   \unskip\unkern%
   \ifnum\c@reviewauthor>\z@ ;\fi\
   \stepcounter{reviewauthor}%
@@ -2411,7 +2411,13 @@
   \ifnum\c@review>\z@\vskip-\a@title@skip\fi%
   \stepcounter{review}%
   \setcounter{reviewauthor}{0}%
-  \let\author\review@author
+  \ifnum\jobstart@date@info>20170704\relax
+    \def\author{%
+      \ClassError{iosart2x}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}\@ehc
+      }%
+  \else
+    \let\author\reviewer
+  \fi
   \review@size
   \@nameuse{review@#1@settings}%
   \reviewname@fmt{\reviewname}%
@@ -2456,7 +2462,13 @@
     \def\@next@{%
       \global\dsreview@toks\expandafter{\the\dsreview@toks#2}%
       %% review author setup
-      \let\author\review@author
+      \ifnum\jobstart@date@info>20170704\relax
+        \def\author{%
+          \ClassError{iosart2x}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}\@ehc
+          }%
+      \else
+        \let\author\reviewer
+      \fi
       \count@reviewers{\the\dsreview@toks}%
       \ifnum\c@review=\z@
         \vskip\dsreview@preskip
