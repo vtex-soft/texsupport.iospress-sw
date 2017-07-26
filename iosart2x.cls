@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/07/04}
-\def\fmt@version{1.1.14}
+\def\fmt@date{2017/07/26}
+\def\fmt@version{1.1.16}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -114,8 +114,7 @@
 \gdef\@journal{Undefined}
 \def\@publisher{IOS Press}
 \def\@publisheraddress{Nieuwe Hemweg 6B, 1013 BG Amsterdam, The Netherlands}
-\def\@copyrightowner{ -- \@@copyrightowner}
-\def\@@copyrightowner{IOS Press and the authors. \@copyrightowner@rights{All rights reserved}}
+\def\@copyrightowner{IOS Press and the authors. \@copyrightowner@rights{All rights reserved}}
 
 \gdef\ios@journal@layout{-1}%
 
@@ -707,7 +706,7 @@
   }
 \def\init@ios@journal@INF@settings{
   \def\theaddress{\arabic{address}}
-  \def\@@copyrightowner{Vilnius University}
+  \def\@copyrightowner{Vilnius University}
   \def\@publisher{Vilnius University Institute of Mathematics and Informatics}
   \def\@publisheraddress{Akademijos 4, LT-08663 Vilnius, Lithuania}
   }
@@ -1147,13 +1146,17 @@
   \fi
   \csname\license@type @license@text\endcsname
   }
+\def\copyright@statement{%
+  \copyright@sign\
+  \@pubyearfrom@fmt\the\@pubyear{ -- }\@copyrightowner
+  }%
 \def\standard@copyright@line{%
-  \@issn/\the@copyearfrom\the@copyear/\$\@price\ \copyright@sign\
-  \@pubyearfrom@fmt\the\@pubyear\@copyrightowner
+  \@issn/\the@copyearfrom\the@copyear/\$\@price\ 
+  \copyright@statement
   }
 \def\short@copyright@line{%
-  \@issn\ \copyright@sign\
-  \@pubyearfrom@fmt\the\@pubyear\@copyrightowner
+  \@issn\
+  \copyright@statement
   }
 \def\copyright@line{%
   \ifdefined\copyright@type
@@ -2607,7 +2610,8 @@
 
 \csuse{\fmt@name @load@printead}
 \appto\before@printead@hook{\def\ead@prefix@m@phone{Tels}}
-\def\orcid@value@prefix{http://orcid.org/}
+\def\ead@hrefprefix@orcid{https://orcid.org/}
+\def\orcid@value@prefix{https://orcid.org/}
 \def\orcid@value@output#1{\orcid@value@prefix #1}
 
 \def\ead@href#1#2{\href{#1}{#2}}%
