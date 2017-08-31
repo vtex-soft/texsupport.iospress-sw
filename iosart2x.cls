@@ -57,8 +57,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/07/26}
-\def\fmt@version{1.1.16}
+\def\fmt@date{2017/08/23}
+\def\fmt@version{1.1.18}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -1913,6 +1913,7 @@
 
 \usepackage{url}
 \csuse{\fmt@name @vtex@url}
+\csuse{\fmt@name @define@url@macro}
 \urlstyle{rm} 
 
 \@ifundefined{tagbib@style}{\def\tagbib@style{}}{}% IOS 1
@@ -3202,11 +3203,13 @@
   \catcode`&=6\relax 
   \gdef\startlocaldefs{%
     \catcode`#=12\relax
+    \makeatletter
     \@startlocaldefs
     }
   \gdef\@startlocaldefs@toks{}%
   \long\gdef\@startlocaldefs&1\endlocaldefs{%
     \long\xdef\@startlocaldefs@toks{\detokenize{&1}}%
+    \makeatother
     \catcode`#=6\relax
     }  
   }
@@ -3235,26 +3238,39 @@
 
 % \bid{doi={...}} syntax
 \let\doi@arg\@empty
+\let\pmid@arg\@empty
 \define@key{bid}{doi}{\def\doi@arg{#1}\edef\bid@exists{1}}
+\define@key{bid}{pmid}{\def\pmid@arg{#1}\edef\bid@exists{1}}
 
 \def\bbl@bid#1{%
   \bgroup
     \setkeys{bid}{#1}%
     \@ifundefined{bid@exists}{}{\unskip}%
+    \csname startchkuriskip\endcsname
+    \csname startchecklinksskip\endcsname
+    \ifx\pmid@arg\@empty
+    \else
+      \space
+      \split@urlmacro{pmid}{\pmid@arg}%
+      .%
+    \fi
     \ifx\doi@arg\@empty
     \else
       \space
-      \csname startchkuriskip\endcsname
-      \csname startchecklinksskip\endcsname
-      \split@DOI\doi@arg
-      \csname endchecklinksskip\endcsname
-      \csname endchkuriskip\endcsname
+      \split@urlmacro{doi}{\doi@arg}%
       .%
     \fi
+    \csname endchecklinksskip\endcsname
+    \csname endchkuriskip\endcsname
   \egroup
   }
 
-\csuse{\fmt@name @load@splitdoi}
+\setpkgattr{biddoi}{prefix}{doi}
+\setpkgattr{biddoi}{sep}{:}
+\setpkgattr{bidpmid}{prefix}{PMID}
+\setpkgattr{bidpmid}{sep}{:}
+\setpkgattr{pmid}{base}{https://www.ncbi.nlm.nih.gov/pubmed/}
+\csuse{\fmt@name @load@spliturlmacro}
 
 \@ifversionge{112}
   {\let\bid\bbl@bid}
