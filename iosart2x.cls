@@ -12,6 +12,7 @@
 %%   Bio-Medical Materials and Engineering (BME)
 %%   Biomedical Spectroscopy and Imaging (BSI)
 %%   Data Science (DS)
+%%   ICGA Journal (ICG)
 %%   Information Services &  Use (ISU)
 %%   Journal of Computer Security (JCS)
 %%   Journal of High Speed Networks (JHS)
@@ -57,8 +58,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/08/23}
-\def\fmt@version{1.1.18}
+\def\fmt@date{2017/10/09}
+\def\fmt@version{1.1.20}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -244,6 +245,20 @@
   \gdef\@open@access@control{1}%
   \gdef\license@type{CC@BY}%
   \gdef\copyright@type{short}%
+}
+
+\DeclareOption{icg}{%
+  \gdef\@jid{icg}
+  \gdef\@JID{ICG}
+  \gdef\@issn{1389-6911}
+  \gdef\@eissn{2468-2438}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{ICGA Journal}
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \def\tagbib@style{bibstyle2}% IOS 2
+  \global\@nameyeartrue
 }
 
 \DeclareOption{isu}{%
@@ -865,6 +880,12 @@
 \addtolength\textheight{-15.1\p@}
 \fi
 
+\def\ICG@JID{ICG}
+\ifx\@JID\ICG@JID
+  \setlength\textwidth{156mm}%
+  %% 47*baselineskip = 47*13 = 611pt
+  \setlength\textheight{\the\dimexpr 611pt + \topskip\relax}%
+\fi
 
 \setlength\columnsep{26\p@}  %9mm 
 \ifnum\ios@journal@layout>\@ne\setlength\columnsep{9mm}\fi
@@ -1119,7 +1140,21 @@
 \hfill{\rtitleheadline@pagesize\thepage}\break
 \@ifundefined{@doi}{}{DOI \@doi\\}%
 \@publisher}
-\let\ltitleheadline\rtitleheadline
+\def\ltitleheadline{%
+  {\rtitleheadline@pagesize\thepage}%
+  \hfill
+  \rtitleheadline@size
+  \@journal\
+  \ifnum\doc@stage<300\relax
+    00 (20xx)%
+  \else
+    \@volume\ (\@pubyearfrom@fmt\the\@pubyear)%
+  \fi
+  \ \@pagerange
+  \break
+  \@ifundefined{@doi}{}{\null\hfill DOI \@doi\\}%
+  \null\hfill\@publisher
+  }
 
 \def\CC@BY@NC@license@text{%
   \ifnum\jobstart@date@info>20160706\relax
