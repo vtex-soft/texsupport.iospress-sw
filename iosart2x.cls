@@ -58,8 +58,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/10/09}
-\def\fmt@version{1.1.20}
+\def\fmt@date{2017/10/26}
+\def\fmt@version{1.1.21}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -718,6 +718,53 @@
   \def\bisbn##1{\href{http://www.isbnsearch.org/isbn/##1}{##1}}%
   \let\review\dsreview
   \let\endreview\enddsreview
+  }
+\def\init@ios@journal@ICG@settings{%
+  \def\uppercase@times{%
+    \usefont{T1}{ptm}{m}{uc}\selectfont
+    }
+  \def\title@size{\LARGE}%
+  \def\section@style{\fontsize{10}{12}\uppercase@times\bfseries\nohyphen\raggedright}%
+  \def\subsection@style{\fontsize{10}{12}\selectfont\nohyphen\raggedright}%
+  \long\def\bibfont{%
+    \normalsize
+    \baselineskip=\dimexpr1\baselineskip\@plus.5\p@\relax
+    }%
+  \bibsep5\p@\@plus.5\p@\@minus.5\p@
+  \parskip5\p@\@plus.5\p@\@minus.5\p@
+  \setlength{\bibhang}{\z@}%
+  %% always centered float captions
+  \long\def\@makefigurecaption##1##2{%
+    \footnotesize
+    \vskip\abovecaptionskip
+    \bgroup
+      \centering
+      ##1 ##2%
+      \par
+    \egroup
+    }%
+  \long\def\@maketablecaption##1##2{%
+    \begingroup
+      \footnotesize
+      \global\setbox\@tempboxa\hbox{##2}%
+    \endgroup
+    \centering
+    \hbox to \hsize{\footnotesize\hss##1\hss}%
+    \par
+    \ifdim\wd\@tempboxa>\tablewidth
+      \parbox[t]{\tablewidth}{%
+        \footnotesize
+        \centering
+        \mbox{}%
+        ##2%
+        \vphantom{Ay}%
+        \par
+        }%
+    \else
+      \hbox to\hsize{\hfill\box\@tempboxa\vphantom{Ay}\hfill}%
+    \fi
+    \vskip\belowcaptionskip
+    }%
   }
 \def\init@ios@journal@INF@settings{
   \def\theaddress{\arabic{address}}
@@ -1920,8 +1967,7 @@
 \ifnum\jobstart@date@info>20170322\relax
   \long\def\bibfont{%
     \footnotesize
-    \edef\orig@baselineskip{\the\baselineskip}%
-    \baselineskip\orig@baselineskip\@plus.5\p@
+    \baselineskip=\dimexpr1\baselineskip\@plus.5\p@\relax
     }
   \bibsep\z@\@plus.5\p@
 \else
