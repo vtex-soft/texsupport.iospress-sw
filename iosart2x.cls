@@ -59,7 +59,7 @@
 
 \def\fmt@name{iosart2x}
 \def\fmt@date{2017/10/26}
-\def\fmt@version{1.1.21}
+\def\fmt@version{1.1.22}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -720,11 +720,8 @@
   \let\endreview\enddsreview
   }
 \def\init@ios@journal@ICG@settings{%
-  \def\uppercase@times{%
-    \usefont{T1}{ptm}{m}{uc}\selectfont
-    }
   \def\title@size{\LARGE}%
-  \def\section@style{\fontsize{10}{12}\uppercase@times\bfseries\nohyphen\raggedright}%
+  \csuse{\fmt@name @ICG@section@style}%
   \def\subsection@style{\fontsize{10}{12}\selectfont\nohyphen\raggedright}%
   \long\def\bibfont{%
     \normalsize
@@ -732,6 +729,7 @@
     }%
   \bibsep5\p@\@plus.5\p@\@minus.5\p@
   \parskip5\p@\@plus.5\p@\@minus.5\p@
+  \parindent\z@
   \setlength{\bibhang}{\z@}%
   %% always centered float captions
   \long\def\@makefigurecaption##1##2{%
