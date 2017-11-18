@@ -58,8 +58,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2017/11/17}
-\def\fmt@version{1.1.25}
+\def\fmt@date{2017/11/18}
+\def\fmt@version{1.1.26}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -3160,14 +3160,8 @@
 \def\zstarshape{\fontencoding{U}\fontfamily{pzd}\fontseries{m}\fontshape{n}\selectfont}
 \DeclareRobustCommand{\zstar}{{\fontencoding{U}\fontfamily{pzd}\fontseries{m}\fontshape{n}\selectfont I}}
 
-\ifnum\jobstart@date@info>20171117\relax
-  \def\orgname#1{#1}
-  \def\institution#1{%
-    \vtxClassError{\fmt@name}{\string\institution{} macro is obsolete. Please use \string\orgname{} macro instead!}{}%
-    }
-\else
-  \def\institution#1{#1}
-\fi
+\def\orgname#1{#1}
+\let\institution\orgname
 \def\cny#1{#1}
 \let\email@href\@secondoftwo
 \def\email{\@ifstar\@semail\@email}
