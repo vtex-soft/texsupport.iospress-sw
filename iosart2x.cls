@@ -19,6 +19,7 @@
 %%   Journal of Integrative Neuroscience (JIN)
 %%   Journal of Neutron Research (JNR)
 %%   Strength, Fracture and Complexity (SFC)
+%%   Technology and Health Care (THC)
 %%  -
 %%   AI Communications (AIC)
 %%   Risk and Decision Analysis (RDA)
@@ -58,8 +59,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2018/05/30}
-\def\fmt@version{1.1.27}
+\def\fmt@date{2019/05/06}
+\def\fmt@version{1.3.10}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -257,6 +258,9 @@
   \gdef\eleven@pt{}%
   \def\tagbib@style{bibstyle2}% IOS 2
   \global\@nameyeartrue
+  \AtBeginDocument{%
+    \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
+    }%
   }
 \DeclareOption{isu}{%
   \gdef\@jid{isu}%
@@ -322,6 +326,17 @@
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
   }
+\DeclareOption{thc}{%
+  \gdef\@jid{thc}%
+  \gdef\@JID{THC}%
+  \gdef\@issn{0928-7329}%
+  \gdef\@eissn{1878-7401}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Technology and Health Care}%
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  }
 %% <<< 1 layout <<<
 
 %% >>> 2 layout >>>
@@ -369,6 +384,9 @@
   \gdef\@journal{Computability}
   \gdef\ios@journal@layout{4}%
   \global\@twocolumnfalse \global\@restonecoltrue
+  \AtBeginDocument{%
+    \global\def\esm@skip@suppress{\dimexpr-1.5\baselineskip\relax}%
+    }%
   }
 
 %% >>> Meta layout >>>
@@ -691,6 +709,9 @@
   \let\endreview\enddsreview
   }
 \def\init@ios@journal@ICG@settings{%
+  \def\prepress@id@line@text{%
+    \hfill p.~\number\@@@sheetcount/\totalpages\fp@id@line@addon
+    }
   \def\title@size{\LARGE}%
   \csuse{\fmt@name @ICG@section@style}%
   \def\subsection@style{\fontsize{10}{12}\selectfont\nohyphen\raggedright}%
@@ -734,6 +755,11 @@
     \fi
     \vskip\belowcaptionskip
     }%
+    \setlength\belowcaptionskip{10\p@}
+    \AtEndOfClass{
+      \let\sidewaystable\undefined
+      \cslet{sidewaystable*}\undefined
+      }
   }
 \def\init@ios@journal@INF@settings{
   \def\theaddress{\arabic{address}}
@@ -1179,6 +1205,19 @@
 
 \csuse{\fmt@name @load@ps@headings}
 
+% stubs for xelatex
+\ifdefined\headerps@out\else
+  \def\headerps@out#1{}%
+\fi
+\AtBeginDocument{%
+  \ifdefined\pdf@box\else
+    \newbox\pdf@box
+  \fi
+  \ifdefined\pdf@addtoksx\else
+    \newtoks\pdf@addtoksx
+  \fi
+  }
+
 %% empty RH
 \def\ps@empty{%
   \let\@mkboth\@gobbletwo
@@ -1268,7 +1307,11 @@
 \def\license@text{%
   \ifdefined\license@type
   \else
-    \def\license@type{CC@BY@NC}%
+    \ifnum\jobstart@date@info<20181205\relax
+      \def\license@type{CC@BY@NC}%
+    \else
+      \vtxClassError{\fmt@name}{\string\setpkgattr{license}{type}{} should be filled for Open Access articles. Possible Open Access license values: CC@BY@NC, CC@BY}{}%
+    \fi
   \fi
   \csname\license@type @license@text\endcsname
   }
@@ -2542,6 +2585,7 @@
   }
 \def\note@sep{,}
 
+\let\glob@notes@out\@firstofone
 \def\thanks@optarg[#1]#2{%
   \ifx.#1.%
     \add@tok\t@glob@notes{\footnotetext}%
@@ -2559,9 +2603,42 @@
   \else
     \edef\my@hy@tmp{\noexpand\hypertarget{#1iosthanks}{}}%
   \fi
-  \expandafter\add@tok\expandafter\t@glob@notes\expandafter{\expandafter{\my@hy@tmp #2}}%
+  \expandafter\add@tok\expandafter\t@glob@notes\expandafter{\expandafter{\my@hy@tmp
+    \if@nameyear
+    \else
+      \@if@vtex@in@house{%
+        \def\abstract@cite@prompt{\string\thanks}%
+        \let\cite\abstract@cite
+        }{}%
+    \fi
+    \glob@notes@out{#2}}}%
   \ignorespaces
   }%
+\ifnum\jobstart@date@info>20190212\relax
+  \def\check@for@email#1\printead#2\printead{%
+    \if.#2.%
+    \else
+      \raggedright
+    \fi
+    }%
+  \def\do#1{%
+    \def\par@jid{#1}%
+    \ifx\@jid\par@jid
+      \def\glob@notes@out##1{%
+        \setbox\@tempboxa\hbox{##1}%
+        \@tempdima=\dimexpr\parindent+\wd\@tempboxa+3\p@\relax
+        \ifdim\@tempdima>\columnwidth\relax
+          \let\printead@sav\printead
+          \let\printead\relax
+          \check@for@email##1\printead\printead
+          \let\printead\printead@sav
+        \fi
+        ##1%
+        }%
+    \fi
+    }
+  \docsvlist{ais,aic,sw,web}%
+\fi
 
 \def\fm@textsuperscript#1{%
   \textsuperscript{\upshape #1}%
@@ -2745,11 +2822,11 @@
   \egroup
   \fm@size=\dp\fm@box
   \advance\fm@size by \ht\fm@box
-  %\@whiledim\fm@size>\t@xtheight\do{%
-  %  \global\setbox\@tempboxa=\vsplit\fm@box to \t@xtheight
-  %  \unvbox\@tempboxa \newpage
-  %  \fm@size=\dp\fm@box \advance\fm@size by \ht\fm@box
-  %  }
+  \@whiledim\fm@size>\t@xtheight\do{%
+    \global\setbox\@tempboxa=\vsplit\fm@box to \t@xtheight
+    \unvbox\@tempboxa \clearpage
+    \fm@size=\dp\fm@box \advance\fm@size by \ht\fm@box
+    }
   \if@twocolumn
     \emergencystretch=1pc
     \twocolumn[\unvbox\fm@box]%
@@ -2802,6 +2879,7 @@
 \setpkgattr{pretitle}{sep}{. }
 \newcommand\pretitle[2][]{%
   \xdef\pretitle@used{1}%
+  \mdforvkt{main-article-info}{pretitle}{#2}%
   \@ifundefined{pretitle@key@#1@}
     {\vtxClassError{\fmt@name}{unknown pretitle option key '#1'}{}}
     {}%
@@ -2816,6 +2894,7 @@
     \@pretitle@hrule
     \vskip12\p@
     }%
+    \global\let\pretitle\undefined
   }
 \def\title#1{%
   \bgroup
@@ -3265,9 +3344,10 @@
   \global\@hasabstracttrue
   \if@nameyear
   \else
-    \@if@vtex@in@house
-      {\let\cite\abstract@cite}
-      {}%
+    \@if@vtex@in@house{%
+      \def\abstract@cite@prompt{\string\abstract}%
+      \let\cite\abstract@cite
+      }{}%
   \fi
   \hyphenpenalty=\sv@hyphenpenalty
   \global\setbox\t@abstract=\vbox\bgroup
@@ -3288,6 +3368,7 @@
     {\@abstract@cite}
     {\@abstract@cite[]}%
   }
+\def\abstract@cite@prompt{\string\abstract}
 \def\@abstract@cite[#1]#2{%
   \def\byear##1{%
     \gdef\@abstract@cite@byear{}%
@@ -3301,7 +3382,7 @@
   \fi
   \setbox\@tempboxa=\hbox{#1}%
   \@ifundefined{@abstract@cite@byear}
-    {\@latex@error{abstract \string\cite: use the following syntax \string\cite[\string\byear{xxxx}]{label}}{}}
+    {\@latex@error{\abstract@cite@prompt\space\string\cite: use the following syntax \string\cite[\string\byear{xxxx}]{label}}{}}
     {}%
   #1%
   }
@@ -3505,6 +3586,7 @@
 \newcommand\backmatter{\goodbreak}
 
 \csdef{known@biography@jhs@project}{1}
+\csdef{known@biography@web@project}{1}
 \define@key{biogr}{title}{\def\biographygroup@title{#1}}
 \newenvironment{biographygroup}[1][title=Biography]%
   {%
@@ -3535,16 +3617,21 @@
     \addvspace{\biography@skip}%
     \stepcounter{biography}%
     \biography@size
-    %% dummy default figure height during 1st compilation
+    %% dummy default figure height and num of line during 1st compilation
     \ifcsundef{bio@photo@\the\c@biography @ht}
       {% 
         \csdef{bio@photo@\the\c@biography @ht}{5pc}%
+        \def\@tmp@bio@num@of@lines{1}%
       }{}%
     \def\photofilename##1{%
       %% box for figure dimensions
       \setbox\bio@tempboxa\hbox{\includegraphics{##1}}%
       %% figure height to aux (we need it when biography text is very short)
-      \protected@write\@auxout{}{\string\csgdef{bio@photo@\the\c@biography @ht}{\the\ht\bio@tempboxa}}%
+      %% figure usage hook too
+      \protected@write\@auxout{}{%
+          \string\csgdef{bio@photo@\the\c@biography @ht}{\the\ht\bio@tempboxa}%
+          \string\csgdef{bio@photo@\the\c@biography @used}{1}%
+          }%
       %% calculating figure height with space around (striping space from baseline [bs-.7em],
       %% i.e. space from baseline to real text)
       \@tempdima=\dimexpr\ht\bio@tempboxa+\biography@figsep-(\baselineskip-.7em)\relax
@@ -3588,10 +3675,14 @@
             }{}%
         }%
       \ios@bio@save@label{##1}%
+      \ignorespaces
       }%
     %% adding all biography to box for situations when text is very short
     \setbox\@tempboxa\vbox\bgroup
-      \@setpar\biography@setpar
+      % if figure is not used, paragraph alternation is not necessary
+      \ifcsundef{bio@photo@\the\c@biography @used}%
+        {\noindent}%
+        {\@setpar\biography@setpar}%
       \ignorespaces
   }{%
       \ifhmode
@@ -3603,19 +3694,25 @@
       {%
         \vtxClassError{\fmt@name}{\string\label{...}\space must be used in biography}{}%
       }%
-    %% if biography text is very short, we're making box with figure height
-    \ifdim\dimexpr\ht\@tempboxa+\dp\@tempboxa\relax<\csuse{bio@photo@\the\c@biography @ht}%
-      \vbox to \csuse{bio@photo@\the\c@biography @ht}{\unvbox\@tempboxa\vfill}%
-    %% if biography text is long, we're splitting box (by number of indenting lines)
-    %% and putting first part as (unbreakable) box, second as unvbox
-    \else
-      \setbox\bio@tempboxa=\vsplit\@tempboxa to \dimexpr\baselineskip*\@tmp@bio@num@of@lines\relax
-      \box\bio@tempboxa
-      \ifvoid\@tempboxa
-      \else
+    %% if photofilename is not used, just unvbox vbox content
+    \ifcsundef{bio@photo@\the\c@biography @used}%
+      {%
         \unvbox\@tempboxa
-      \fi
-    \fi
+      }{%
+        %% if biography text is very short, we're making box with figure height
+        \ifdim\dimexpr\ht\@tempboxa+\dp\@tempboxa\relax<\csuse{bio@photo@\the\c@biography @ht}%
+        \vbox to \csuse{bio@photo@\the\c@biography @ht}{\unvbox\@tempboxa\vfill}%
+        %% if biography text is long, we're splitting box (by number of indenting lines)
+        %% and putting first part as (unbreakable) box, second as unvbox
+        \else
+          \setbox\bio@tempboxa=\vsplit\@tempboxa to \dimexpr\baselineskip*\@tmp@bio@num@of@lines\relax
+          \box\bio@tempboxa
+          \ifvoid\@tempboxa
+          \else
+            \unvbox\@tempboxa
+          \fi
+       \fi
+    }%
   }
 
 \gdef\refname{References}
@@ -3684,7 +3781,19 @@
   \section*{\esm@title}%
   \esm@titlesep
   }
-\define@key{esm}{title}{\def\esm@title{#1}}
+%\def\extract@skip#1\p@#2\relax{#1}
+%\def\section@beforeskip@val{\expandafter\extract@skip\section@beforeskip\relax}
+%\def\section@afterskip@val{\expandafter\extract@skip\section@afterskip\relax}
+%\def\esm@skip@suppress{\dimexpr-\section@beforeskip@val\p@-\section@afterskip@val\p@\relax}
+\def\esm@skip@suppress{\dimexpr-3\baselineskip\relax}
+\define@key{esm}{title}{%
+  \def\esm@title{%
+    #1%
+    \if.#1.%
+      \vskip\esm@skip@suppress
+    \fi
+    }%
+  }
 \def\esm{%
   \@ifnextchar[%
     \@esm
@@ -3837,7 +3946,6 @@
 \AtBeginDocument{\gdef\multi@issue@sep@diff@one{,}}%
 
 \csuse{\fmt@name @urilist}
-\csuse{\fmt@name @outfile}
 \csuse{\fmt@name @speciss}
 
 %% >>> startlocaldefs, endlocaldefs >>>
@@ -4026,59 +4134,6 @@
 \def\bpages#1{#1}
 \def\bprice#1{#1}
 %% <<< book-review <<<
-
-% >>> line numbers grid from imsart.sty >>>
-\long\def\l@addto@macro#1#2{%
-  \toks@\expandafter{#1#2}%
-  \edef#1{\the\toks@}%
-  }
-
-\setpkgattr{numberlines}{size}{\scriptsize\ttfamily}
-\setpkgattr{numberlines}{skip}{24\p@}
-
-\def\numberlines@hook{%
-  \l@addto@macro\@evenhead\put@numberlines@box
-  \l@addto@macro\@oddhead\put@numberlines@box
-  }
-
-\g@addto@macro\ps@copyright\numberlines@hook
-%\g@addto@macro\ps@headings\numberlines@hook
-
-\newbox\numberlines@box
-\newskip\numberlines@box@skip
-
-\def\set@numberlines@box{%
-  \setlength\numberlines@box@skip\headsep
-  \addtolength\numberlines@box@skip{5\p@}%
-  %
-  \setbox\numberlines@box\vtop to\textheight{%
-    \parindent\z@    
-    \vskip\z@   
-    \@tempcnta=0
-    \@tempdima=\z@
-    \loop
-      \advance\@tempcnta by1
-      \advance\@tempdima by\baselineskip
-      \hbox to\textwidth{%
-         \llap{\numberlines@size\the\@tempcnta\kern\numberlines@skip}%
-         \hfill
-         \rlap{\numberlines@size\kern\numberlines@skip\the\@tempcnta}%
-         }%
-      \ifdim\@tempdima<\textheight\repeat
-    \vss
-    }%
-  %
-  \ht\numberlines@box\z@
-  \dp\numberlines@box\z@
-  }
-
-\def\put@numberlines@box{\lower\numberlines@box@skip\hbox to\z@{\hss\copy\numberlines@box}}
-
-\AtBeginDocument{%
-  \set@numberlines@box
-  \numberlines@hook
-  }
-% <<< line numbers <<<
 
 \endinput
 %%
