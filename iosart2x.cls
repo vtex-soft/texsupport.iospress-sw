@@ -59,7 +59,7 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2019/05/06}
+\def\fmt@date{2019/11/11}
 \def\fmt@version{1.3.10}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
@@ -3577,7 +3577,7 @@
 \def\@date{\today}
 \def\empty@data{\@nil}
 \def\doi#1{\gdef\@doi{#1}}
-\def\doi@base{http://dx.doi.org/}
+\def\doi@base{https://dx.doi.org/}
 \let\@doi\relax
 
 \csuse{\fmt@name @articletype}
