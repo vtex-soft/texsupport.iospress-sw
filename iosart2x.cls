@@ -20,6 +20,7 @@
 %%   Journal of Neutron Research (JNR)
 %%   Strength, Fracture and Complexity (SFC)
 %%   Technology and Health Care (THC)
+%%   Journal on Satisfiability, Boolean Modeling and Computation (SAT)
 %%  -
 %%   AI Communications (AIC)
 %%   Risk and Decision Analysis (RDA)
@@ -59,8 +60,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2019/11/11}
-\def\fmt@version{1.3.10}
+\def\fmt@date{2019/11/20}
+\def\fmt@version{1.3.12}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -336,6 +337,18 @@
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
+  }
+\DeclareOption{sat}{%
+  \gdef\@jid{sat}
+  \gdef\@JID{SAT}
+  \gdef\@issn{}
+  \gdef\@eissn{1574-0617}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Journal on Satisfiability, Boolean Modeling and Computation}
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \gdef\@open@access@control{1}%
   }
 %% <<< 1 layout <<<
 
@@ -3577,7 +3590,7 @@
 \def\@date{\today}
 \def\empty@data{\@nil}
 \def\doi#1{\gdef\@doi{#1}}
-\def\doi@base{https://dx.doi.org/}
+\def\doi@base{https://doi.org/}
 \let\@doi\relax
 
 \csuse{\fmt@name @articletype}
