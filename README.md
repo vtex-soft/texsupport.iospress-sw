@@ -21,3 +21,6 @@ camera-ready paper in LaTeX. This document contains useful information regarding
 - Read the instructions (`iosart2x.pdf`) for the preparation of your LaTeX document;
 - Use the template file `sw_template.tex` to prepare your manuscript.
 
+## Bug reports
+
+Please submit bug report, issues or feature requests to `latex-support@vtex.lt`.
