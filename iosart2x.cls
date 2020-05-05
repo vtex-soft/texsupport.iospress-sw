@@ -13,14 +13,14 @@
 %%   Biomedical Spectroscopy and Imaging (BSI)
 %%   Data Science (DS)
 %%   ICGA Journal (ICG)
-%%   Information Services &  Use (ISU)
+%%   Information Services & Use (ISU)
 %%   Journal of Computer Security (JCS)
 %%   Journal of High Speed Networks (JHS)
 %%   Journal of Integrative Neuroscience (JIN)
 %%   Journal of Neutron Research (JNR)
 %%   Strength, Fracture and Complexity (SFC)
 %%   Technology and Health Care (THC)
-%%   Journal on Satisfiability, Boolean Modeling and Computation (SAT)
+%%   Journal of Future Robot Life (FRL)
 %%  -
 %%   AI Communications (AIC)
 %%   Risk and Decision Analysis (RDA)
@@ -28,6 +28,12 @@
 %%   International Shipbuilding Progress (ISP)
 %%  -
 %%   Computability (COM)
+%%  -
+%%   Journal on Satisfiability, Boolean Modeling and Computation (SAT)
+%%  -
+%%   Clinical Hemorheology and Microcirculation (CH)
+%%   Informatica (INF)
+%%   NeuroRehabilitation (NRE)
 %%
 %% published by IOS Press, The Netherlands 
 %%
@@ -60,8 +66,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2019/11/20}
-\def\fmt@version{1.3.12}
+\def\fmt@date{2020/04/23}
+\def\fmt@version{1.3.16}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -338,17 +344,21 @@
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
   }
-\DeclareOption{sat}{%
-  \gdef\@jid{sat}
-  \gdef\@JID{SAT}
-  \gdef\@issn{}
-  \gdef\@eissn{1574-0617}%
+\DeclareOption{frl}{%
+  \gdef\@jid{frl}
+  \gdef\@JID{FRL}
+  \gdef\@issn{2589-9953}
+  \gdef\@eissn{2589-9961}%
   \gdef\@price{35.00}%
-  \gdef\@journal{Journal on Satisfiability, Boolean Modeling and Computation}
+  \gdef\@journal{Journal of Future Robot Life}
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
-  \gdef\@open@access@control{1}%
+  \def\tagbib@style{bibstyle2}% IOS 2
+  \global\@nameyeartrue
+  \AtBeginDocument{%
+    \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
+    }%
   }
 %% <<< 1 layout <<<
 
@@ -402,6 +412,20 @@
     }%
   }
 
+%% 5 layout
+\DeclareOption{sat}{%
+  \gdef\@jid{sat}%
+  \gdef\@JID{SAT}%
+  \gdef\@issn{}%
+  \gdef\@eissn{1574-0617}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Journal on Satisfiability, Boolean Modeling and Computation}%
+  \gdef\ios@journal@layout{5}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \gdef\@open@access@control{1}%
+  }
+
 %% >>> Meta layout >>>
 \DeclareOption{ch}{%
   \gdef\@jid{ch}%
@@ -447,9 +471,14 @@
 
 \PassOptionsToPackage{fleqn}{amsmath}
 \ExecuteOptions{twoside,final,openright,fleqn}
+
 \ProcessOptions
 
 \RequirePackage{etoolbox}
+
+\expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
+  \xdef\iosx@version{112}% \bid and \newtheoremstyle{plain} settings
+  }{}%
 
 %% class cfg load
 \long\def\@if@vtex@in@house#1#2{%
@@ -474,12 +503,49 @@
 \def\qq@text{TO BE UPDATED}
 
 %% LAYOUTS
+\newlength\abstract@width
+\newdimen\b@author@skip
+\newdimen\abstract@name@skip
+\newdimen\abstract@indent@val
+\newskip\b@history@skip
 \def\common@layout@settings{%
   \let\ge\geqslant
   \let\geq\geqslant
   \let\le\leqslant
   \let\leq\leqslant
   \renewcommand{\Bigg}{\bBigg@{2.6}}%
+  \def\copyright@sign@delim{\ }%
+  \def\@copyright@delim{ -- }%
+  \let\auth@style\relax
+  \let\auth@fn@skip\,%
+  \b@author@skip=8\p@
+  \newcommand\abstractname@sep{.\ }%
+  \abstract@name@skip=\z@
+  \abstract@width=\textwidth
+  \def\abstract@indent{%
+    \noindent
+    \parindent=1em%
+    }%
+  \def\keywords@indent{\parindent=\z@}%
+  \let\keywordsname@fmt\@firstofone
+  \newcommand\keywordsname@sep{:\ }%
+  \def\keywords@size{\abstract@size}%
+  \def\history@size{\footnotesize\baselineskip=12pt}%
+  \b@history@skip=12pt%
+  %
+  \def\accepted@postfix{\par}%
+  \def\acceptedby@postfix{\par}%
+  \def\communicated@postfix{\par}%
+  \def\published@postfix{\par}%
+  \def\received@postfix{\par}%
+  \def\revised@postfix{\par}%
+  \def\submitted@postfix{\par}%
+  %
+  \def\dedicated@postfix{\par\egroup}%
+  %
+  \def\history@postfix{}%
+  \let\upd@hist@prefices\relax
+  \def\tablefont{\footnotesize}%
   }
 \def\common@settings@from@ios@two@a{%
   \def\tfrac##1##2{{\textstyle\frac{##1}{##2}}}
@@ -564,7 +630,7 @@
   \def\address@size{\footnotesize\itshape}
   \let\rtitleheadline@size\scriptsize
   \let\rtitleheadline@pagesize\scriptsize
-  \def\abstract@indent{}
+  \def\abstract@indent{\parindent=1em}
   \def\abstractname{}
   \def\abstractname@sep{}
   \def\proof@topsep{11pt plus 3pt}
@@ -634,7 +700,7 @@
   \def\abstract@size{\small}
   \abstract@skip=16pt plus .5pt minus .5pt
   \keywords@skip=13pt plus .5pt minus .5pt
-  \def\keywordsname{\textbf{Keywords}\textbf}
+  \def\keywordsname@fmt##1{\textbf{##1}\textbf}%
   \b@section@skip=15pt plus1pt minus1pt
   \g@addto@macro\close@fm{%
     \global\@afterindentfalse
@@ -692,6 +758,222 @@
     \def\href##1##2{\ioscom@href{##1}{\texttt{##2}}}
     }
   }
+\newif\if@make@lua@auth@ \@make@lua@auth@false
+\ifdefined\HCode\else
+  \ifnum\ios@journal@layout=5\relax
+    \@make@lua@auth@true
+  \fi
+\fi
+\@namedef{init@ios@journal@5@layout}{% SAT
+  \hoffset=-0.88in
+  \voffset=-1.8mm
+  %
+  \newcount\pdfshellescape
+  \pdfshellescape=\@ne
+  \if@make@lua@auth@
+    \directlua{%
+      tab_chr = string.char(9)            % "\t"
+      eol_chr = string.char(10)           % "\n"
+      cr_chr = string.char(10)            % "\r"
+      hash_chr = string.char(35)          % "#"
+      perc_chr = string.char(37)          % "%"
+      bslash_chr = string.char(92)        % "\\"
+      underscore_chr = string.char(95)    % "_"
+      %
+      \short@journal_author = {}          % array of authors
+                                          % index -- author order number
+                                          % value -- record with following fields:
+                                          %     .fnms -- first name(s), not a value, just a marker of the presence: 'x' or nil
+                                          %     .thanks -- corresponding author note, not a value, just a marker of the presence: 'x' or nil
+                                          %     .eads -- csv list of email labels \ead@labels, collected from optional parameters of \ead[] -- 'e1', 'e1,e2', etc.
+                                          %     .addrefs -- an array of references to addresses: {'A'}, {'B', 'C'}, etc. -- values from optional parameter of \author[]
+                                          %     .done -- author already printed: true or nil
+                                          %   unused:
+                                          %     .locnotes -- value of \t@loc@notes after processing with \proc@elem
+      %
+      \short@journal_address = {}         % array of addresses
+                                          % index -- address order number
+                                          % value -- record with following fields:
+                                          %     .addref -- reference to the addresses: 'A', 'B', 'C', etc. -- values from optional parameter of \address[]
+                                          %     .done -- address already printed: true or nil
+                                          %   unused:
+                                          %     .locnotes -- value of \t@loc@notes after processing with \proc@elem
+      %
+      \short@journal_addr_map = {}        % back mapping between addrefs and addres indices
+                                          % index -- addref -- reference to the addresses: 'A', 'B', 'C', etc. -- values from optional parameter of \address[]
+                                          % value -- address index (order number)
+      }%
+  \fi
+  \def\bfseries{\fontseries{bx}\selectfont}%
+  \csname init@ios@journal@1@layout\endcsname
+  \def\rtitleheadline@size{\scriptsize}%
+  \def\@runsep{}%
+  \def\@evenhead{\small\scshape\hfill\@runauthor\hfill}%
+  \def\@oddhead{\small\scshape\hfill\@runtitle\hfill}%
+  \def\@evenfoot{\small\rlap{\thepage}\hfill\includegraphics[scale=.3]{sat1cim}\hfill}%
+  \def\@oddfoot{\small\hfill\includegraphics[scale=.3]{sat1cim}\hfill\llap{\thepage}}%
+  \def\copyright@size{\scriptsize}%
+  \def\copyright@sign@delim{}%
+  \def\@copyright@delim{\ }%
+  \def\@copyrightowner{IOS Press, SAT Association and the authors.}%
+  \def\standard@copyright@line{\copyright@statement}%
+  \@@topskip=-7\p@
+  \def\title@size{\center\Large\bfseries\mathversion{bold}}%
+  \b@author@skip=7\p@
+  \def\authors@size{\normalsize}%
+  \def\auth@style{\bfseries}%
+  \let\auth@fn@skip\relax
+  \def\address@size{\small\itshape}%
+  \renewcommand\abstractname@sep{}%
+  \abstract@name@skip=2\p@
+  \abstract@width=413\p@
+  \abstract@indent@val=20\p@%\dimexpr(\textwidth-\abstract@width)/2\relax
+  \def\abstract@indent{%
+    \hangindent=\abstract@indent@val%\leftmargin=\abstract@indent@val
+    \parindent=\dimexpr\parindent@value+\hangindent\relax
+    }%
+  \def\abstract@size{\small}%
+  \keywords@skip=12\p@
+  \def\keywords@indent{%
+    \abstract@indent
+    \parindent=\hangindent
+    }%
+  \def\keywordsname@fmt##1{{\scshape ##1}}%
+  \renewcommand\keywordsname@sep{{\normalfont :}\hskip 10\p@}%
+  \def\keywords@size{\abstract@size\itshape}%
+  \def\history@size{\footnotesize\itshape}%
+  %
+  \def\accepted@postfix{}%
+  \def\acceptedby@postfix{}%
+  \def\communicated@postfix{}%
+  \def\dedicated@postfix{}%
+  \def\published@postfix{}%
+  \def\received@postfix{}%
+  \def\revised@postfix{}%
+  \def\submitted@postfix{}%
+  %
+  \ifdefined\HCode\else
+    \def\upd@hist@prefices{%
+      \def\accepted@prefix{; accepted~}%
+      \def\acceptedby@prefix{; accepted~by:~}%
+      \def\communicated@prefix{; communicated~}%
+      \def\dedicated@prefix{; dedicated~}%
+      \def\published@prefix{; published~}%
+      \def\received@prefix{; received~}%
+      \def\revised@prefix{; revised~}%
+      \def\submitted@prefix{; submitted~}%
+      }%
+  \fi
+  \b@section@skip=4\p@
+  \def\section@beforeskip{18\p@}%
+  \def\section@afterskip{10\p@}%
+  \def\subsection@beforeskip{16\p@}%
+  \def\subsection@afterskip{6\p@}%
+  \def\subsubsection@beforeskip{6\p@}%
+  \def\subsubsection@afterskip{6\p@}%
+  \def\section@style{\fontsize{12}{14}\selectfont\bfseries\mathversion{bold}\nohyphen\raggedright}%
+  \def\subsection@style{\normalsize\bfseries\mathversion{bold}\nohyphen\raggedright}%
+  \def\subsubsection@style{\normalsize\selectfont\scshape\mathversion{bold}\nohyphen\raggedright}%
+  %\@afterindentfalse
+  \renewcommand\section{%
+    \@startsection{section}{1}{\z@}%
+      {-\section@beforeskip}%
+      {\section@afterskip}%
+      {\section@style}%
+    }
+  \renewcommand\subsection{%
+    \@startsection{subsection}{2}{\subsection@indent}%
+      {-\subsection@beforeskip}%
+      {\subsection@afterskip}%
+      {\subsection@style}%
+    }
+  \renewcommand\subsubsection{%
+    \@startsection{subsubsection}{3}{\z@}%
+      {-\subsubsection@beforeskip}%
+      {\subsubsection@afterskip}%
+      {\subsubsection@style}%
+    }
+  %
+  \renewcommand\figurename{Figure}%
+  \global\def\fnum@figure{\normalsize\textbf{\figurename~\thefigure.}\small}
+  \global\def\fnum@table{\normalsize\textbf{\tablename~\thetable.}\small}
+  \global\long\def\@maketablecaption##1##2{%
+    \setbox\@tempboxa\hbox{##1 ##2}%
+    \ifdim\wd\@tempboxa>\hsize
+      \unhbox\@tempboxa
+      \par
+    \else
+      \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
+    \vskip\belowcaptionskip
+    }%
+  \long\def\@makefigurecaption##1##2{%
+    \vskip\abovecaptionskip
+    \setbox\@tempboxa\hbox{##1 ##2}%
+    \ifdim\wd\@tempboxa>\hsize
+      \unhbox\@tempboxa
+      \par
+    \else
+      \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
+    \vskip\belowcaptionskip
+    }%
+  \setlength\belowcaptionskip{10\p@}%
+  \def\tablefont{\normalsize}%
+  %
+  \AtBeginDocument{%
+    \def\proof@topsep{\z@}
+    }%
+  \def\proofname{Proof}%
+  \def\@proof@label@sep{:}%
+  %
+  \let\bibfont\normalsize
+  \bibsep=9\p@\@plus.5\p@\@minus.5\p@
+  %
+  %\usepackage[dvipsnames]{xcolor}%
+  %\definecolor{NavyBlue}{rgb}{0,0.45,0.73}%
+  %\definecolor{NavyBlue}{rgb}{0.03,0.43,0.74}%
+  \definecolor{NavyBlue}{rgb}{0.1,0.45,0.82}%
+  \definecolor{WildStrawberry}{rgb}{0.93,0.23,0.43}%
+  %\definecolor{Maroon}{rgb}{0.73,0.19,0.20}%
+  \definecolor{Maroon}{rgb}{0.5,0,0}%
+  \AtBeginDocument{%
+    \hypersetup{%
+      linkcolor=Maroon,
+      citecolor=NavyBlue,
+      urlcolor=WildStrawberry
+      }%
+    }%
+  \AtEndOfClass{%
+    \urlstyle{tt}%
+    \let\ioscom@href\href
+    \def\href##1##2{\ioscom@href{##1}{\texttt{##2}}}
+    }
+  }
+\AtBeginDocument{%
+  \ifnum\ios@journal@layout=5\relax
+    \renewenvironment{proof}[1][\proofname]%
+      {%
+  %      \par
+        \pushQED{\qed}%
+        \normalfont
+        \topsep=\proof@topsep
+        \relax
+        \trivlist
+        \item[%
+          \hskip\labelsep
+          \bfseries
+          #1\@proof@label@sep]%
+        \ignorespaces
+      }{%
+        \hfill\null
+        \popQED
+        \endtrivlist
+        \@endpetrue
+        \vskip6\p@
+      }%
+  \fi
+  }
 
 \ifdefined\@open@access@control
   \AtBeginDocument{\mandatory@open@access@option@error}%
@@ -700,7 +982,7 @@
 %% Journal-specific settings
 \def\init@ios@journal@ASY@settings{%
   \gappto\@articletype@prehook{%
-    \global\let\ios@pages@trimbox\ios@pages@trimbox@asy
+    \global\let\ios@pages@trimbox\ios@pages@trimbox@papersize
     }%
   }
 \def\init@ios@journal@COM@settings{%
@@ -774,6 +1056,7 @@
       \cslet{sidewaystable*}\undefined
       }
   }
+\let\init@ios@journal@FRL@settings\init@ios@journal@ICG@settings
 \def\init@ios@journal@INF@settings{
   \def\theaddress{\arabic{address}}
   \def\@copyrightowner{Vilnius University}
@@ -785,6 +1068,11 @@
     \b@author@skip=-2\p@
     \dsreview@postskip=6\p@
   \fi
+  }
+\def\init@ios@journal@SAT@settings{%
+  \gappto\@articletype@prehook{%
+    \global\let\ios@pages@trimbox\ios@pages@trimbox@papersize
+    }%
   }
 
 %% Fonts
@@ -925,6 +1213,7 @@
 \let\slshape\itshape
 
 %% Text dimensions
+\newlength\parindent@value
 \setlength\parindent{10\p@}
 \ifcase\ios@journal@layout
   \setlength\textwidth{460\p@}% 162mm
@@ -937,6 +1226,10 @@
 \or
   \setlength\textwidth{162mm}%
   \setlength\parindent{5.5mm}%
+\or
+  \setlength\textwidth{6.0 true in}% 152.4mm
+  \setlength\parindent@value{18\p@}%
+  \setlength\parindent{\parindent@value}%
 \fi
 
 \setlength\textheight{50\baselineskip}
@@ -950,13 +1243,17 @@
 \ifnum\ios@journal@layout=4
   \addtolength\textheight{-15.1\p@}%
 \fi
+\ifnum\ios@journal@layout=5
+  \setlength\textheight{8.5 true in}% 215.9 mm
+\fi
 
-\def\ICG@JID{ICG}
-\ifx\@JID\ICG@JID
+\def\init@ios@journal@ICG@textframe{%
   \setlength\textwidth{156mm}%
   %% 47*baselineskip = 47*13 = 611pt
   \setlength\textheight{\the\dimexpr 611pt + \topskip\relax}%
-\fi
+  }
+\let\init@ios@journal@FRL@textframe\init@ios@journal@ICG@textframe
+\@nameuse{init@ios@journal@\@JID @textframe}
 
 \setlength\columnsep{26\p@}  %9mm 
 \ifnum\ios@journal@layout>\@ne
@@ -1053,6 +1350,10 @@
   \setlength\maxdepth{4\p@}
 \fi
 
+\ifnum\ios@journal@layout=5\relax
+  \setlength\headsep{40\p@}%
+\fi
+
 % SIDE MARGINS
 \setlength\oddsidemargin   {\@tempdima}
 \setlength\evensidemargin  {\@tempdima}
@@ -1066,6 +1367,8 @@
   \addtolength\topmargin{43\p@}
 \or
   \addtolength\topmargin{5.06\p@}
+\or
+  \setlength\topmargin{-20\p@}%
 \fi
 
 % TEXT PARAMETERS
@@ -1278,10 +1581,15 @@
     \@volume\ (\@pubyearfrom@fmt\the\@pubyear)%
   \fi
   \ \@pagerange
-  \hfill{\rtitleheadline@pagesize\thepage}%
-  \break
-  \@ifundefined{@doi}{}{DOI \@doi\\}%
-  \@publisher
+  \hfill
+  \ifnum\ios@journal@layout=5\relax
+    \raise -5\p@\hbox{\includegraphics[scale=.4]{sat1cim}}%
+  \else
+    {\rtitleheadline@pagesize\thepage}%
+    \break
+    \@ifundefined{@doi}{}{DOI \@doi\\}%
+    \@publisher
+  \fi
   }
 \def\ltitleheadline{%
   {\rtitleheadline@pagesize\thepage}%
@@ -1303,9 +1611,12 @@
   \ifnum\jobstart@date@info>20160706\relax
     This article is published online with Open Access and distributed under
     the terms of the Creative Commons Attribution Non-Commercial Li%
-    \ifnum\ios@journal@layout=\thr@@
+    \ifnum\ios@journal@layout=5
     \else
-      \char\hyphenchar\font\break
+      \ifnum\ios@journal@layout=\thr@@
+      \else
+        \char\hyphenchar\font\break
+      \fi
     \fi
     cense (CC BY-NC 4.0).%
   \else
@@ -1329,8 +1640,8 @@
   \csname\license@type @license@text\endcsname
   }
 \def\copyright@statement{%
-  \copyright@sign\
-  \@pubyearfrom@fmt\the\@pubyear{ -- }\@copyrightowner
+  \copyright@sign\copyright@sign@delim
+  \@pubyearfrom@fmt\the\@pubyear\@copyright@delim\@copyrightowner
   }%
 \def\standard@copyright@line{%
   \@issn/\the@copyearfrom\the@copyear/\$\@price\ 
@@ -1831,7 +2142,11 @@
 \csuse{\fmt@name @load@textcomp}
 \normalfont
 
-\csuse{\fmt@name @load@mathtime}
+\ifnum\ios@journal@layout=5\relax
+  \RequirePackage{lmodern}%
+\else
+  \csuse{\fmt@name @load@mathtime}%
+\fi
 
 \RequirePackage{amsmath}
 \RequirePackage{amsthm}
@@ -2062,10 +2377,9 @@
   }{%
     \end@dblfloat
   }
-
 \def\@tableboxreset{%
   \reset@font
-  \centering\footnotesize
+  \centering\tablefont
   \def\arraystretch{1.2}%
   \@setnobreak
   \@setminipage
@@ -2338,26 +2652,7 @@
 \expandafter\def\csname month@item@0\endcsname{????}
 
 \newif\if@history \@historyfalse
-\newskip\b@history@skip
-\b@history@skip=12pt
 
-\def\received#1{%
-  \def\@tempa{#1}%
-  \ifx\@tempa\@empty
-  \else
-    \gdef\@received{#1}%
-    \global\@historytrue
-  \fi
-  }
-\def\@received{\@nil}
-\def\revised#1{%
-  \def\@tempa{#1}%
-  \ifx\@tempa\@empty
-  \else
-    \gdef\@revised{#1}%
-  \fi
-  }
-\def\@revised{\@nil}
 \def\accepted#1{%
   \def\@tempa{#1}%
   \ifx\@tempa\@empty
@@ -2385,60 +2680,112 @@
   \fi
   }
 \def\@dedicated{\@nil}
+\def\published#1{%
+  \def\@tempa{#1}%
+  \ifx\@tempa\@empty
+  \else
+    \gdef\@published{#1}%
+    \global\@historytrue
+  \fi
+  }
+\def\@published{\@nil}
+\def\received#1{%
+  \def\@tempa{#1}%
+  \ifx\@tempa\@empty
+  \else
+    \gdef\@received{#1}%
+    \global\@historytrue
+  \fi
+  }
+\def\@received{\@nil}
+\def\revised#1{%
+  \def\@tempa{#1}%
+  \ifx\@tempa\@empty
+  \else
+    \gdef\@revised{#1}%
+    \global\@historytrue
+  \fi
+  }
+\def\@revised{\@nil}
+\def\submitted#1{%
+  \def\@tempa{#1}%
+  \ifx\@tempa\@empty
+  \else
+    \gdef\@submitted{#1}%
+    \global\@historytrue
+  \fi
+  }
+\def\@submitted{\@nil}
+
 \def\acceptedby#1{\gdef\@acceptedby{#1}}
 
+\def\accepted@prefix{Accepted~}
 \def\acceptedby@prefix{Accepted~by:~}
+\def\communicated@prefix{Communicated~by~}
+\def\published@prefix{Published~}
 \def\received@prefix{Received~}
 \def\revised@prefix{Revised~}
-\def\accepted@prefix{Accepted~}
-\def\communicated@prefix{Communicated~by~}
+\def\submitted@prefix{Submitted~}
+
 \def\dedicated@prefix{%
   \bgroup
   \vskip\b@history@skip
   \leavevmode
   \normalsize\itshape
   }
-\def\history@prefix{}
 
-\def\acceptedby@postfix{\par}
-\def\received@postfix{\par}
-\def\revised@postfix{\par}
-\def\accepted@postfix{\par}
-\def\communicated@postfix{\par}
-\def\dedicated@postfix{\par\egroup}
-\def\history@postfix{}
+\def\history@prefix{}
 
 \def\empty@data{\@nil}
 \def\history@fmt{%
   \bgroup
-    \footnotesize
-    \baselineskip=12pt
+    \history@size
     \vskip\b@history@skip
     \history@prefix
     \leavevmode
+    \ifnum\ios@journal@layout=5\relax
+      \hsize=\abstract@width
+      \keywords@indent
+      \hskip\abstract@indent@val
+    \fi
+    %
     \ifx\@received\empty@data
     \else        
-      \received@prefix
-      \@received
-      \received@postfix
+      \received@prefix\@received\received@postfix
+      \upd@hist@prefices
+    \fi
+    \ifx\@submitted\empty@data
+    \else        
+      \submitted@prefix\@submitted\submitted@postfix
+      \upd@hist@prefices
     \fi
     \ifx\@revised\empty@data
     \else
       \revised@prefix\@revised\revised@postfix
+      \upd@hist@prefices
     \fi
     \ifx\@accepted\empty@data
     \else
       \accepted@prefix\@accepted\accepted@postfix
+      \upd@hist@prefices
     \fi
     \ifx\@communicated\empty@data
     \else
       \communicated@prefix\@communicated\communicated@postfix
+      \upd@hist@prefices
+    \fi
+    \ifx\@published\empty@data
+    \else
+      \published@prefix\@published\published@postfix
+      \upd@hist@prefices
     \fi
     \history@postfix
     \ifx\@dedicated\empty@data
     \else
       \dedicated@prefix\@dedicated\dedicated@postfix
+      \upd@hist@prefices
     \fi
+    %
     \par
   \egroup
   }
@@ -2521,6 +2868,10 @@
   \def\qq@style{}%
   \def\protect{\noexpand\protect\noexpand}%
   }
+\def\upd@elem#1{%
+  \prev@elem=\cur@elem
+  \cur@elem=\csname e@#1\endcsname
+  }
 \def\proc@elem#1#2{%
   \begingroup
     \no@harm
@@ -2528,8 +2879,7 @@
     \def\thanksref##1##{\@gobble}%
     \@xnamedef{@#1}{#2}%
   \endgroup
-  \prev@elem=\cur@elem
-  \cur@elem=\csname e@#1\endcsname
+  \upd@elem{#1}%
   \expandafter\elem@nothanksref#2\thanksref\relax
   \expandafter\elem@nothanks#2\thanks\relax
   }
@@ -2590,11 +2940,13 @@
   }
 
 \def\add@addressref#1{%
-  \global\advance\note@cnt\@ne
-  \ifnum\note@cnt>\@ne
-    \add@xtok\t@loc@notes{\note@sep}%
+  \ifnum\ios@journal@layout=5\else
+    \global\advance\note@cnt\@ne
+    \ifnum\note@cnt>\@ne
+      \add@xtok\t@loc@notes{\note@sep}%
+    \fi
+    \add@tok\t@loc@notes{\ref{#1}}%
   \fi
-  \add@tok\t@loc@notes{\ref{#1}}%
   }
 \def\note@sep{,}
 
@@ -2706,10 +3058,18 @@
     \gdef\@pagerange{\special@supplement@letter\thefirstpage--\special@supplement@letter\thelastpage}%
   \fi
   \thispagestyle{copyright}%
-  \if@preface
+  \ifnum\ios@journal@layout=5\relax
+    \if@make@lua@auth@
+      \directlua{%
+        make_authors()
+        }%
+    \fi
   \else
-    \if@history
-      \history@fmt
+    \if@preface
+    \else
+      \if@history
+        \history@fmt
+      \fi
     \fi
   \fi
   \newcount\c@sv@footnote
@@ -2748,6 +3108,11 @@
         \acceptedby@postfix
       \egroup
     }%
+  \ifnum\ios@journal@layout=5\relax
+    \if@history
+      \history@fmt
+    \fi
+  \fi
   \@ifundefined{has@notes}
     {}
     {%
@@ -3134,14 +3499,14 @@
 
 \csuse{\fmt@name @vkt@cmn@fm@add}
 
-\newdimen\b@author@skip \b@author@skip=8\p@
-
 \def\author{%
   \@ifnextchar[%
     {\author@optarg}
     {\author@optarg[]}%
   }
+
 \def\author@optarg[#1]#2{%
+  \global\ead@labels={}%
   \stepcounter{author}%
   \beg@elem
   \def\degs##1{##1}%
@@ -3150,13 +3515,24 @@
     {}%
   \def\prefix##1{%
     \protect\protected@write\@auxout{}{\string\global\string\@namedef{prefix@\the\c@author @tmp}{##1 }}%
-    ##1%
+    \if@make@lua@auth@\else
+      ##1%
+    \fi
     }%
   \def\fnms##1{%
     \protect\mdforvkt{main-article-info}{fnm-\the\c@author}{\@nameuse{prefix@\the\c@author @tmp}##1}%
     \cmd@for@aut@elem{fnms}{\the\c@author}{\@nameuse{prefix@\the\c@author @tmp}##1}%
     \cmd@for@aut@elem{fnmsmd}{\the\c@author}{##1}% for PDF metadata only, which don't have prefix
-    ##1%
+    \if@make@lua@auth@
+      \if .##1.\else
+        \directlua{%
+          \short@journal_author[\the\c@author] = \short@journal_author[\the\c@author] or {} 
+          \short@journal_author[\the\c@author].fnms = 'x'
+          }%
+      \fi
+    \else
+      ##1%
+    \fi
     }%
   \def\inits##1{%
     \protect\mdforvkt{main-article-info}{inits-\the\c@author}{\@nameuse{prefix@\the\c@author @tmp}##1}%
@@ -3167,7 +3543,9 @@
     \protect\protected@write\@auxout{}{\string\global\string\@namedef{snm@\the\c@author @tmp}{##1}}%
     \protect\mdforvkt{main-article-info}{snm-\the\c@author}{##1}%
     \cmd@for@aut@elem{snm}{\the\c@author}{##1}%
-    ##1%
+    \if@make@lua@auth@\else
+      ##1%
+    \fi
     }%
   \@ifundefined{snm@\the\c@author @tmp}
     {\@namedef{snm@\the\c@author @tmp}{}}
@@ -3175,9 +3553,15 @@
   \def\suffix##1{%
     \protect\mdforvkt{main-article-info}{snm-\the\c@author}{\@nameuse{snm@\the\c@author @tmp}\space ##1}%
     \cmd@for@aut@elem{snm}{\the\c@author}{\@nameuse{snm@\the\c@author @tmp}\space ##1}%
-    ##1%
+    \if@make@lua@auth@\else
+      ##1%
+    \fi
     }%
-  \def\roles##1{##1}%
+  \def\roles##1{%
+    \if@make@lua@auth@\else
+      ##1%
+    \fi
+    }%
   \def\bio##1{%
     \csxdef{ios@bio@##1@label}{1}%
     }%
@@ -3187,14 +3571,66 @@
   \fi
   \@for\@tempa:=#1\do{%
     \expandafter\add@addressref\expandafter{\@tempa}%
+    \if@make@lua@auth@
+      \directlua{%
+        \short@journal_author[\the\c@author] = \short@journal_author[\the\c@author] or {} 
+        \short@journal_author[\the\c@author].addrefs = \short@journal_author[\the\c@author].addrefs or {}
+        table.insert(\short@journal_author[\the\c@author].addrefs, '\@tempa')
+        }%
+    \fi
     }%
   \let\oldunderscore\_%
   \let\_\textunderscore
+  \if@make@lua@auth@
+    \directlua{%
+      \short@journal_author[\the\c@author] = \short@journal_author[\the\c@author] or {} 
+      }%
+  \fi
   \proc@elem{author}{#2}%
   \let\_\oldunderscore
-  \author@fmt{\the\c@author}{\the\t@loc@notes}{\@author}%
+  \if@make@lua@auth@
+    \setbox\@tempboxa=\hbox{\@author}%
+    \directlua{%
+      \short@journal_author[\the\c@author] = \short@journal_author[\the\c@author] or {} 
+      % \short@journal_author[\the\c@author].locnotes = '\the\t@loc@notes'
+      \short@journal_author[\the\c@author].eads = '\the\ead@labels'
+      }%
+    %
+    \def\thanks##1{%
+      \if .##1.\else
+        \directlua{%
+          \short@journal_author[\the\c@author] = \short@journal_author[\the\c@author] or {} 
+          \short@journal_author[\the\c@author].thanks = 'x'
+          }%
+        \fi
+      }%
+    \setbox\@tempboxa=\hbox{#2}%
+  \else
+    \author@fmt{\the\c@author}{\the\t@loc@notes}{\@author}%
+  \fi
   }%
+
+\newtoks\ead@labels% csv list of all ead labels of the current author: e2,e3
+\ead@labels={}
+\ifdefined\HCode\else
+  \def\append@ead@label#1=#2\relax{\expandafter\global\expandafter\ead@labels\expandafter =\expandafter{\the\ead@labels #2}}% \append@ead@label label=e1\relax
+  \ifnum\ios@journal@layout=5\relax
+    \AtBeginDocument{%
+      \let\ead@sav\ead
+      \renewcommand\ead[2][]{%
+        \if.\the\ead@labels.%
+        \else
+          \expandafter\global\expandafter\ead@labels\expandafter =\expandafter{\the\ead@labels,}%
+        \fi
+        \append@ead@label #1\relax
+        \ead@sav[#1]{#2}%
+        }%
+      }%
+  \fi
+\fi
+
 \def\author@fmt#1#2#3{%
+  \global\ead@labels={}%
   \@newelemtrue
   \ifnum\prev@elem=\e@author
     \global\@newelemfalse
@@ -3203,10 +3639,33 @@
     \author@fmt@init
   \fi
   \edef\@tempb{#2}%
-  \ifx\@tempb\@empty
-    \hbox{#3}%
-  \else
-    \hbox{#3\,\fm@textsuperscript{#2}}%
+  \bgroup
+    \auth@style
+    \ifx\@tempb\@empty
+      \hbox{#3}%
+    \else
+      \hbox{#3\auth@fn@skip\fm@textsuperscript{%
+        \if@make@lua@auth@
+          \color{Maroon}%
+        \fi
+        #2%
+        }}%
+    \fi
+  \egroup
+  \ifdefined\HCode\else
+    \ifnum\ios@journal@layout=5\relax
+      \hfill
+      \def\ead@delim{}%
+      \def\do##1{%
+        \texttt{\ead@delim\csname ead@##1@value\endcsname}%
+        \def\ead@delim{, }%
+        }%
+      \bgroup
+        \small    
+        \expandafter\docsvlist\expandafter{\the\ead@labels}%
+      \egroup
+      \break
+    \fi
   \fi
   }
 \def\first@author{%
@@ -3220,6 +3679,112 @@
   \raggedright
   \leavevmode
   }
+
+\if@make@lua@auth@
+  \directlua{%
+    % array length
+    if (not table.getn) then
+      table.getn = function(tab)
+        ii = 0
+        while not (tab[ii + 1] == nil) do
+          ii = ii + 1
+          end
+        return ii;
+        end
+      end
+    % single address output
+    function make_addr(adr_ix, adr_val)
+      locnotes = adr_val.locnotes or ''
+      tex.print(bslash_chr .. 'makeatletter')
+      tex.print(bslash_chr .. 'upd@elem{address}' .. perc_chr)
+      tex.print(bslash_chr .. 'address@fmt{0}{' .. locnotes .. '}{' .. perc_chr)
+        tex.print(bslash_chr .. 'csname \short@journal @raw@' .. adr_ix .. '@address' .. bslash_chr .. 'endcsname')
+        tex.print('}' .. perc_chr)
+      end
+    %
+    % single author output
+    function make_aut(aut_ix, aut_val)
+      fnms = aut_val.fnms or ''
+      fnms_delim = bslash_chr .. ' '
+      if (fnms == '') then
+        fnms_delim = ''
+        end
+      eads = aut_val.eads or ''
+      thanks = aut_val.thanks or ''
+      locnotes = aut_val.locnotes or ''
+      % thanks_cmd = ''
+      if (not (thanks == '')) then
+        % thanks_cmd = bslash_chr .. 'thanks{' .. thanks .. '}'
+        % thanks_cmd = bslash_chr .. 'add@thanks *'
+        % thanks_cmd = bslash_chr .. 'thefootnote'
+        locnotes = '*'
+        end
+      %
+      tex.print(bslash_chr .. 'makeatletter')
+      % tex.print(bslash_chr .. 'def' .. bslash_chr .. 'thanksref' .. hash_chr .. '1' .. hash_chr .. hash_chr .. '{bslash_chr .. @gobble}' .. perc_chr)% \def\thanksref##1##{\@gobble}%
+      tex.print(bslash_chr .. 'upd@elem{author}' .. perc_chr)
+      tex.print(bslash_chr .. 'author@fmt{' .. tostring(aut_ix) .. '}{' .. locnotes .. '}{' .. perc_chr)
+        % tex.print(fnms .. perc_chr)
+        tex.print(bslash_chr .. 'csname \short@journal @fnms@' .. aut_ix .. '@author' .. bslash_chr .. 'endcsname')
+        tex.print(fnms_delim .. perc_chr)
+        tex.print(bslash_chr .. 'csname \short@journal @snm@' .. aut_ix .. '@author' .. bslash_chr .. 'endcsname')
+        % tex.print(thanks_cmd .. perc_chr)
+        tex.print(bslash_chr .. 'global' .. bslash_chr .. 'ead@labels={' .. eads .. '}' .. perc_chr)
+        tex.print('}' .. perc_chr)
+      end
+    %
+    % the whole author / address chunk
+    function make_authors()
+      % single address authors
+      for adr_ix, adr_val in pairs(\short@journal_address) do
+        addref = adr_val.addref or 'x'
+        outfl = false
+        for aut_ix, aut_val in pairs(\short@journal_author) do
+          addrefs = aut_val.addrefs or {}
+          if (table.getn(addrefs) == 1) and (addref == addrefs[1]) then
+            outfl = true
+            break
+            end
+          end
+        if outfl then
+          for aut_ix, aut_val in pairs(\short@journal_author) do
+            addrefs = aut_val.addrefs or {}
+            if (table.getn(addrefs) == 1) and (addref == addrefs[1]) then
+              make_aut(aut_ix, aut_val)
+              aut_val.done = true
+              end
+            end
+          make_addr(adr_ix, adr_val)
+          adr_val.done = true
+          end
+        end
+      %  
+      % multiple address authors
+      for aut_ix, aut_val in pairs(\short@journal_author) do
+        if not aut_val.done then
+          make_aut(aut_ix, aut_val)
+          aut_val.done = true
+          addrefs = aut_val.addrefs or {}
+          for _, addref in pairs(addrefs) do
+            adr_ix = \short@journal_addr_map[addref]
+            if adr_ix then
+              adr_val = \short@journal_address[adr_ix]
+              make_addr(adr_ix, adr_val)
+              adr_val.done = true
+              end
+            end
+          end
+        end
+      %
+      % rest addresses
+      for adr_ix, adr_val in pairs(\short@journal_address) do
+        if not adr_val.done then
+          make_addr(adr_ix, adr_val)
+          end
+        end
+      end
+    }%
+\fi
 
 \ifnum\jobstart@date@info>20170330\relax
   \def\and{\unskip\ and }
@@ -3252,6 +3817,7 @@
 \def\zstarshape{\fontencoding{U}\fontfamily{pzd}\fontseries{m}\fontshape{n}\selectfont}
 \DeclareRobustCommand{\zstar}{{\fontencoding{U}\fontfamily{pzd}\fontseries{m}\fontshape{n}\selectfont I}}
 
+\def\dept#1{#1}
 \def\orgname#1{#1}
 \let\institution\orgname
 \def\cny#1{#1}
@@ -3288,26 +3854,54 @@
         {\address@noptarg}%
     }%
   }
-\def\address@optarg[#1]#2{%
-  \refstepcounter{address}%
-  \beg@elem
-  \proc@elem{address}{#2}%
-  \address@fmt{\the\c@address}{\the\t@loc@notes}{\@address}\label{#1}%
-  \ignorespaces
-  }
-\def\address@noptarg#1{%
-  \refstepcounter{address}%
-  \beg@elem
-  \proc@elem{address}{#1}%
-  \address@fmt{\z@}{\the\t@loc@notes}{\@address}%
-  \ignorespaces
-  }
-\def\address@star#1{%
-  \beg@elem
-  \proc@elem{address}{#1}%
-  \address@fmt{\m@ne}{\the\t@loc@notes}{\@address}%
-  \ignorespaces
-  }
+\if@make@lua@auth@
+  \def\cmd@for@elem#1#2#3#4{% forms new command for an element of the author or address
+    \global\@namedef{\short@journal @#1@#2@#3}{#4}%
+    }
+  \def\address@optarg[#1]#2{%
+    \refstepcounter{address}%
+    \beg@elem
+    \cmd@for@elem{raw}{\the\c@address}{address}{#2}%
+    \proc@elem{address}{#2}%
+    \setbox\@tempboxa=\vbox{\@address}%
+    \directlua{%
+      \short@journal_address[\the\c@address] = \short@journal_address[\the\c@address] or {} 
+      \short@journal_address[\the\c@address].addref = '#1'
+      % \short@journal_address[\the\c@address].locnotes = '\the\t@loc@notes'
+      \short@journal_addr_map['#1'] = \the\c@address
+      }%
+    \ignorespaces
+    }%
+  \def\address@noptarg#1{%
+    \address@optarg[\the\c@address]{#1}%
+    }%
+  \def\address@star#1{%
+    \address@optarg[\the\c@address]{#1}%
+    }%
+\else
+  \def\address@optarg[#1]#2{%
+    \ifnum\ios@journal@layout=5\else
+      \refstepcounter{address}%
+    \fi
+    \beg@elem
+    \proc@elem{address}{#2}%
+    \address@fmt{\the\c@address}{\the\t@loc@notes}{\@address}\label{#1}%
+    \ignorespaces
+    }
+  \def\address@noptarg#1{%
+    \refstepcounter{address}%
+    \beg@elem
+    \proc@elem{address}{#1}%
+    \address@fmt{\z@}{\the\t@loc@notes}{\@address}%
+    \ignorespaces
+    }
+  \def\address@star#1{%
+    \beg@elem
+    \proc@elem{address}{#1}%
+    \address@fmt{\m@ne}{\the\t@loc@notes}{\@address}%
+    \ignorespaces
+    }
+\fi
 \def\theaddress{\alph{address}}
 \def\address@fmt#1#2#3{%
   \@newelemtrue
@@ -3336,8 +3930,10 @@
   }
 \def\address@fmt@init{%
   \def\@currentlabel{\theaddress}%
-  \par
-  \vskip 2\p@ plus 1\p@ minus 1\p@
+  \ifnum\ios@journal@layout=5\else
+    \par
+    \vskip 2\p@ plus 1\p@ minus 1\p@
+  \fi
   }
 
 \newskip\abstract@skip \abstract@skip=48pt
@@ -3364,12 +3960,23 @@
   \fi
   \hyphenpenalty=\sv@hyphenpenalty
   \global\setbox\t@abstract=\vbox\bgroup
-    \linewidth=\textwidth
+    \hsize=\abstract@width
+    \ifnum\ios@journal@layout=5\relax
+      \bgroup
+        \center\large\abstractname@fmt{\abstractname}\par
+      \egroup
+      \par
+      \vskip\abstract@name@skip
+    \fi
     \justify@on
     \abstract@size
-    \parindent=1em
     \abstract@indent
-    \abstractname@fmt{\abstractname}%
+    \ifdefined\HCode\else
+      \everypar{\abstract@indent}%
+    \fi
+    \ifnum\ios@journal@layout=5\else
+      \abstractname@fmt{\abstractname}%
+    \fi
     \ignorespaces
   }
 \def\endabstract{%
@@ -3422,10 +4029,11 @@
 \def\keyword{%
   \global\@haskeywordstrue
   \global\setbox\t@keywords=\vbox\bgroup
+    \hsize=\abstract@width
     \justify@on
-    \abstract@size
-    \parindent=\z@
-    \keywordsname
+    \keywords@size
+    \keywords@indent
+    \keywordsname@fmt{\keywordsname}%
     \keywordsname@sep
     \ignorespaces
   }
@@ -3440,9 +4048,11 @@
   \end{keyword}%
   }
 
-\def\runningtitle#1{\gdef\@runtitle{#1}}
+\def\runningtitle#1{\vtxClassError{\fmt@name}{The command \string\runningtitle\space is obsolete, use \string\runtitle\space instead}{}}
+\def\runtitle#1{\gdef\@runtitle{#1}}
 \def\@runtitle{}
-\def\runningauthor#1{%
+\def\runningauthor#1{\vtxClassError{\fmt@name}{The command \string\runningauthor\space is obsolete, use \string\runauthor\space instead}{}}
+\def\runauthor#1{%
   \bgroup
     \def\etal{et al.}%
     \gdef\@runauthor{#1\@runsep}%
@@ -3451,8 +4061,6 @@
 \def\@runauthor{}
 \def\runningsep#1{\gdef\@runsep{#1}}
 \def\@runsep{\ /\ }
-\let\runtitle\runningtitle
-\let\runauthor\runningauthor
 \def\journal#1{\gdef\@journal{#1}}
 \@ifundefined{@journal}
   {\gdef\@journal{Journal not defined}}
@@ -3541,7 +4149,7 @@
       \@copyearfrom/%
     }%
   }
-  
+
 \def\firstpage#1{%
   \mdforvkt{main-article-info}{firstpage}{#1}%
   \def\@tempa{#1}%
@@ -3737,9 +4345,7 @@
 \newcommand\appendixname{Appendix}
 \newcommand\abstractname{Abstract}
 \newcommand\abstractname@fmt[1]{{\bfseries #1\abstractname@sep}}
-\newcommand\abstractname@sep{.\ }
 \newcommand\keywordsname{Keywords}
-\newcommand\keywordsname@sep{:\ }
 \def\copyright@sign{\copyright}
 
 \def\pretitle@size{\LARGE}
@@ -3747,7 +4353,6 @@
 \def\subtitle@size{\large\itshape}
 \def\authors@size{\large}
 \def\abstract@size{\small}
-\def\abstract@indent{\noindent}
 \def\address@size{\normalsize\itshape}
 
 \newcommand\today{}
