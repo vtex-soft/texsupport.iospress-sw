@@ -66,8 +66,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2020/04/23}
-\def\fmt@version{1.3.16}
+\def\fmt@date{2020/11/06}
+\def\fmt@version{1.3.17}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -94,11 +94,13 @@
     \RequirePackage[dvips,counterclockwise,figuresright]{rotating}%
     }%
   }
+\newif\ifnumberlines \numberlinestrue
 \DeclareOption{crcready}{%
   \AtBeginDocument{%
-    \gdef\rtitleheadline{}%
-    \gdef\@copyright{}%
-    \pagestyle{empty}%
+    %\gdef\rtitleheadline{}%
+    %\gdef\@copyright{}%
+    %\pagestyle{empty}%
+    \numberlinesfalse
     \relax
     }%
   }%
