@@ -66,8 +66,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2020/11/06}
-\def\fmt@version{1.3.19}
+\def\fmt@date{2020/11/09}
+\def\fmt@version{1.3.20}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -97,9 +97,9 @@
 \newif\ifnumberlines \numberlinestrue
 \DeclareOption{crcready}{%
   \AtBeginDocument{%
-    %\gdef\rtitleheadline{}%
-    %\gdef\@copyright{}%
-    %\pagestyle{empty}%
+    \gdef\rtitleheadline{}%
+    \gdef\@copyright{}%
+    \pagestyle{empty}%
     \numberlinesfalse
     \relax
     }%
