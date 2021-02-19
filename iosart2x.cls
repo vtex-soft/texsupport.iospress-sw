@@ -21,6 +21,7 @@
 %%   Strength, Fracture and Complexity (SFC)
 %%   Technology and Health Care (THC)
 %%   Journal of Future Robot Life (FRL)
+%%   Fundamenta Informaticae (FI)
 %%  -
 %%   AI Communications (AIC)
 %%   Risk and Decision Analysis (RDA)
@@ -66,8 +67,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2020/11/09}
-\def\fmt@version{1.3.20}
+\def\fmt@date{2021/02/18}
+\def\fmt@version{1.3.25}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -131,10 +132,30 @@
 %% Information about journal
 \gdef\@issn{0000-0000}
 \gdef\@price{00.00}
+\def\copyright@price{/\$\@price}
+\AtBeginDocument{%
+  \if@open@access
+    \def\copyright@price{}%
+  \fi
+  }%
 \gdef\@journal{Undefined}
 \def\@publisher{IOS Press}
 \def\@publisheraddress{Nieuwe Hemweg 6B, 1013 BG Amsterdam, The Netherlands}
-\def\@copyrightowner{IOS Press and the authors. \@copyrightowner@rights{All rights reserved}}
+\def\@copyrightowner{%
+  \ifnum\the\@pubyear<2021\relax
+    \expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
+      IOS Press, SAT Association and the authors.%
+    }{%
+      IOS Press and the authors. \@copyrightowner@rights{All rights reserved}%
+    }%
+  \else
+    \if@open@access
+      The authors. Published by IOS Press.%
+    \else
+      IOS Press. All rights reserved.%
+    \fi
+  \fi
+  }
 
 \gdef\ios@journal@layout{-1}%
 
@@ -353,6 +374,22 @@
   \gdef\@eissn{2589-9961}%
   \gdef\@price{35.00}%
   \gdef\@journal{Journal of Future Robot Life}
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \def\tagbib@style{bibstyle2}% IOS 2
+  \global\@nameyeartrue
+  \AtBeginDocument{%
+    \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
+    }%
+  }
+\DeclareOption{fi}{%
+  \gdef\@jid{fi}
+  \gdef\@JID{FI}
+  \gdef\@issn{0169-2968}
+  \gdef\@eissn{1875-8681}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Fundamenta Informaticae}
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
@@ -589,6 +626,13 @@
     }
   \hfuzz=0.1\p@
   }
+\@namedef{init@ios@journal@0@layout}{%
+  \AtEndOfClass{%
+    \ifnum\jobstart@date@info>20201209\relax
+      \mathindent=\z@
+    \fi
+    }%
+  }%
 \@namedef{init@ios@journal@1@layout}{% B type from ios2a
   \common@settings@from@ios@two@a
   \clubpenalty=4000
@@ -611,7 +655,13 @@
   }
 \@namedef{init@ios@journal@2@layout}{% A type from ios2a
   \common@settings@from@ios@two@a
-  \AtEndOfClass{\mathindent=20\p@}
+  \AtEndOfClass{%
+    \ifnum\jobstart@date@info>20201209\relax
+      \mathindent=\z@
+    \else
+      \mathindent=20\p@
+    \fi
+    }
   \setlength\tablewidth{217.66pt}
   \leftmargini=25pt
   \leftmargin=\leftmargini
@@ -636,6 +686,13 @@
   \def\abstractname{}
   \def\abstractname@sep{}
   \def\proof@topsep{11pt plus 3pt}
+  \def\copyright@size{%
+    \ifnum\the\@pubyear<2021\relax
+      \footnotesize
+    \else
+      \fontsize{8}{10}\selectfont
+    \fi
+    }
   }
 \@namedef{init@ios@journal@4@layout}{% D type from ios2a
   \common@settings@from@ios@two@a
@@ -732,7 +789,13 @@
   \def\subparagraph@afterskip{-1em}
   \def\subparagraph@indent{1em}
   \let\rtitleheadline@size\scriptsize
-  \def\copyright@size{\scriptsize}
+  \def\copyright@size{%
+    \ifnum\the\@pubyear<2021\relax
+      \scriptsize
+    \else
+      \fontsize{9}{11}\selectfont
+    \fi
+    }
   \def\copyright@vskip{\vskip36.2pt}
   \def\@listI{%
     \leftmargin=\leftmargini
@@ -814,11 +877,36 @@
   \def\@oddhead{\small\scshape\hfill\@runtitle\hfill}%
   \def\@evenfoot{\small\rlap{\thepage}\hfill\includegraphics[scale=.3]{sat1cim}\hfill}%
   \def\@oddfoot{\small\hfill\includegraphics[scale=.3]{sat1cim}\hfill\llap{\thepage}}%
-  \def\copyright@size{\scriptsize}%
-  \def\copyright@sign@delim{}%
-  \def\@copyright@delim{\ }%
-  \def\@copyrightowner{IOS Press, SAT Association and the authors.}%
-  \def\standard@copyright@line{\copyright@statement}%
+  \def\copyright@size{%
+    \ifnum\the\@pubyear<2021\relax
+      \scriptsize
+    \else
+      \fontsize{8}{10}\selectfont
+    \fi
+    }
+  \expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
+    \def\copyright@sign@delim{%
+      \ifnum\the\@pubyear<2021\relax
+      \else
+        \ %
+      \fi
+      }%
+    \def\@copyright@delim{%
+      \ifnum\the\@pubyear<2021\relax
+        \ %
+      \else
+        \ --\ %
+      \fi
+      }%
+    \def\standard@copyright@line{%
+      \ifnum\the\@pubyear<2021\relax
+      \else
+        %\@eissn/\the@copyearfrom\the@copyear\copyright@price\ %
+        \@eissn\copyright@price\ %
+      \fi
+      \copyright@statement
+      }%
+    }{}%
   \@@topskip=-7\p@
   \def\title@size{\center\Large\bfseries\mathversion{bold}}%
   \b@author@skip=7\p@
@@ -1560,7 +1648,13 @@
   \let\@evenfoot\@oddfoot
   }
 
-\let\copyright@size\footnotesize
+\def\copyright@size{%
+  \ifnum\the\@pubyear<2021\relax
+    \footnotesize
+  \else
+    \fontsize{9}{11}\selectfont
+  \fi
+  }
 \def\copyright@vskip{\vskip10pt}
 \def\ps@copyright{%
   \let\@mkboth\@gobbletwo
@@ -1616,25 +1710,35 @@
   }
 
 \def\CC@BY@NC@license@text{%
-  \ifnum\jobstart@date@info>20160706\relax
-    This article is published online with Open Access and distributed under
-    the terms of the Creative Commons Attribution Non-Commercial Li%
-    \ifnum\ios@journal@layout=5
-    \else
-      \ifnum\ios@journal@layout=\thr@@
+  \ifnum\the\@pubyear<2021\relax
+    \ifnum\jobstart@date@info>20160706\relax
+      This article is published online with Open Access and distributed under
+      the terms of the Creative Commons Attribution Non-Commercial Li%
+      \ifnum\ios@journal@layout=5
       \else
-        \char\hyphenchar\font\break
+        \ifnum\ios@journal@layout=\thr@@
+        \else
+          \char\hyphenchar\font\break
+        \fi
       \fi
+      cense (CC BY-NC 4.0).%
+    \else
+      This article is published online with Open Access and distributed under
+      the terms of the Creative Commons Attribution Non-Commercial License.%
     \fi
-    cense (CC BY-NC 4.0).%
   \else
-    This article is published online with Open Access and distributed under 
-    the terms of the Creative Commons Attribution Non-Commercial License.%
+    This is an Open Access article distributed under the terms of the
+    Creative Commons Attribution-NonCommercial License (\href{https://creativecommons.org/licenses/by-nc/4.0/}{CC BY-NC 4.0}).%
   \fi
   }
 \def\CC@BY@license@text{%
-  This article is published online with Open Access
-  and distributed under the terms of the Creative Commons Attribution License (CC BY 4.0).%
+  \ifnum\the\@pubyear<2021\relax
+    This article is published online with Open Access
+    and distributed under the terms of the Creative Commons Attribution License (CC BY 4.0).%
+  \else
+    This is an Open Access article distributed under the terms of the
+    Creative Commons Attribution License (\href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}).%
+  \fi
   }
 \def\license@text{%
   \ifdefined\license@type
@@ -1650,9 +1754,18 @@
 \def\copyright@statement{%
   \copyright@sign\copyright@sign@delim
   \@pubyearfrom@fmt\the\@pubyear\@copyright@delim\@copyrightowner
+  \ifdefined\HCode\else
+    \ifnum\the\@pubyear<2021\relax
+    \else
+      \if@open@access
+        \ \license@text
+      \fi
+    \fi
+  \fi
   }%
 \def\standard@copyright@line{%
-  \@issn/\the@copyearfrom\the@copyear/\$\@price\ 
+  %\@issn/\the@copyearfrom\the@copyear\copyright@price\ %
+  \@issn\copyright@price\ %
   \copyright@statement
   }
 \def\short@copyright@line{%
@@ -1673,18 +1786,20 @@
   \expandafter\ifstrequal\expandafter{\@JID}{FRL}{%
     \vskip-2.5\baselineskip
     }{}%
-  \if@open@access
-    \mbox{%
-      \rlap{%
-        \raisebox{-1.5\baselineskip}[\z@][\z@]{%
-          \vtop{%
-            \fontsize{7.9}\baselineskip\selectfont%
-            \license@text
+  \ifnum\the\@pubyear<2021\relax
+    \if@open@access
+      \mbox{%
+        \rlap{%
+          \raisebox{-1.5\baselineskip}[\z@][\z@]{%
+            \vtop{%
+              \fontsize{7.9}\baselineskip\selectfont
+              \license@text
+              }%
             }%
           }%
         }%
-      }%
-  \fi%
+    \fi
+  \fi
   \copyright@line
   }%
 
@@ -4462,6 +4577,7 @@
     \egroup
   }
 
+\RequirePackage{nameref}
 \RequirePackage{hyperref}
 \csuse{\fmt@name @load@hypersetup}
 \csuse{\fmt@name @load@vtexhdvips}
