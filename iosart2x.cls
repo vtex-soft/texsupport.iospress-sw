@@ -67,8 +67,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2021/02/18}
-\def\fmt@version{1.3.25}
+\def\fmt@date{2021/02/22}
+\def\fmt@version{1.3.26}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -4577,7 +4577,9 @@
     \egroup
   }
 
-\RequirePackage{nameref}
+\ifdefined\HCode\else
+  \RequirePackage{nameref}
+\fi
 \RequirePackage{hyperref}
 \csuse{\fmt@name @load@hypersetup}
 \csuse{\fmt@name @load@vtexhdvips}

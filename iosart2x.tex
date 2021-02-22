@@ -9,7 +9,7 @@
 
 %% Article Info
 \firstpage{1}
-\lastpage{6}
+\lastpage{4}
 \volume{1}
 \pubyear{0000}
 
@@ -128,7 +128,7 @@ your document (i.e. commands like \verb|\textheight|,
 \subsection{Font}
 
 For literal text, please use
-\texttt{type\-writer} (\verb|\texttt{}|)
+\texttt{type\-writer}\break (\verb|\texttt{}|)
 or \textsf{sans serif} (\verb|\textsf{}|). \emph{Italic} (\verb|\emph{}|)
 or \textbf{boldface} (\verb|\textbf{}|) should be used for emphasis.
 
@@ -150,7 +150,7 @@ Use class option ``\texttt{crcready}'' in order to remove the page numbers from 
 
 Use sentence case for the title.
 
-Use \verb|\thanks{}| command for footnotes in \verb|\title|
+Use \verb|\thanks{}| command for footnotes in\break \verb|\title|
 and \verb|\author| commands.
 
 Do not use capitals for author's surname.
@@ -177,11 +177,6 @@ References should be collected at the end of your paper (environment
 end of these instructions. Use the command \verb|\cite| to refer to the entries in the bibliography so that your
 accumulated list corresponds to the citations made in the text body.
 
-\begin{figure}[b]
-\includegraphics{iospress}
-\caption{Figure caption.}
-\end{figure}
-
 
 \subsection{Figures}
 \subsubsection{General remarks on figures}
@@ -200,6 +195,11 @@ Each figure should have a self-explanatory caption. Place the figure caption \te
 All figures coded with \verb|figure| and \verb|\caption| will be numbered automatically.
 
 On maps and other figures where a scale is needed, use bar scales rather than numerical ones of the type 1:10,000.
+
+\begin{figure}
+\includegraphics{iospress}
+\caption{Figure caption.}
+\end{figure}
 
 \subsubsection{Quality of illustrations}\label{s3.8.2}
 Do \textit{not} use illustrations taken from the Internet.
@@ -259,7 +259,7 @@ Tables should be presented in the form shown in
 Table~\ref{t1}.  Their layout should be consistent
 throughout.
 
-\begin{table*}[htb]
+\begin{table*}
 \caption{Table caption} \label{t1}
 \begin{tabular}{@{}ll d{1.3} d{1.3} d{1.3} d{1.3} d{1.3} d{1.3}@{}}
 \hline
@@ -304,7 +304,7 @@ Use \verb|\runtitle{}| command to insert short title that will appear at the top
 Submit the following to the journal Editorial office, online submission form or Editor-in-Chief (whichever is applicable for the journal):
 
 \begin{enumerate}
-\item The main \LaTeX{} document as well as other required files (png, etc.).
+\item The main \LaTeX{} document as well as other required files.
 \item PDF version of the \LaTeX{} file.
 \item Please make sure you do not submit more than one version of any item.
 \end{enumerate}
@@ -322,7 +322,7 @@ Appendices should be provided in \verb|appendix| environment, before References.
 Use the standard \LaTeX{} commands for headings in Appendix.
 
 \subsection{Second subsection}
-Headings will be automatically numbered. 
+Headings will be automatically numbered.
 \end{appendix}
 
 
