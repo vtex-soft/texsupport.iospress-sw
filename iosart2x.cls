@@ -4,6 +4,7 @@
 %%   Journal of Ambient Intelligence and Smart Environments (AIS)
 %%   Semantic Web (SW)
 %%   Web Intelligence (WEB)
+%%   Journal of Clinical Speech and Language Studies (ACS)
 %%  -
 %%   Argument & Computation (AAC)
 %%   Applied Ontology (AO)
@@ -22,6 +23,7 @@
 %%   Technology and Health Care (THC)
 %%   Journal of Future Robot Life (FRL)
 %%   Fundamenta Informaticae (FI)
+%%   Journal of Vestibular Research (VES)
 %%  -
 %%   AI Communications (AIC)
 %%   Risk and Decision Analysis (RDA)
@@ -67,8 +69,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2021/02/22}
-\def\fmt@version{1.3.26}
+\def\fmt@date{2021/05/28}
+\def\fmt@version{1.3.31}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -77,6 +79,24 @@
 \newif\if@openright
 \newif\if@mainmatter \@mainmattertrue
 \newif\if@nameyear \@nameyearfalse
+
+\RequirePackage{etoolbox}
+
+%% class cfg load
+\long\def\@if@vtex@in@house#1#2{%
+  \@ifundefined{vtex@in@house}
+    {#2}
+    {#1}%
+  }
+\IfFileExists{\fmt@name-vtex.cfg}
+  {%
+    \xdef\vtex@in@house{1}%
+    \input\fmt@name-vtex.cfg
+  }{%
+    \input\fmt@name.cfg
+  }
+
+\csuse{\fmt@name @load@fileinfo}
 
 \DeclareOption{10pt}{\let\eleven@pt\relax}
 \DeclareOption{11pt}{\def\eleven@pt{}}
@@ -167,7 +187,11 @@
   \gdef\@eissn{1876-1372}%
   \gdef\@price{35.00}%
   \gdef\@journal{Journal of Ambient Intelligence and Smart Environments}%
-  \global\@twocolumntrue
+  \ifnum\jobstart@date@info>20210304\relax
+    \global\@twocolumnfalse \global\@restonecoltrue
+  \else
+    \global\@twocolumntrue
+  \fi
   \gdef\ios@journal@layout{0}%
   }
 \DeclareOption{sw}{%
@@ -177,7 +201,11 @@
   \gdef\@eissn{2210-4968}%
   \gdef\@price{35.00}%
   \gdef\@journal{Semantic Web}%
-  \global\@twocolumntrue
+  \ifnum\jobstart@date@info>20210528\relax
+    \global\@twocolumnfalse \global\@restonecoltrue
+  \else
+    \global\@twocolumntrue
+  \fi
   \gdef\ios@journal@layout{0}%
   }
 \DeclareOption{web}{%
@@ -187,6 +215,16 @@
   \gdef\@eissn{2405-6464}%
   \gdef\@price{35.00}%
   \gdef\@journal{Web Intelligence}%
+  \global\@twocolumntrue
+  \gdef\ios@journal@layout{0}%
+  }
+\DeclareOption{acs}{%
+  \gdef\@jid{acs}%
+  \gdef\@JID{ACS}%
+  \gdef\@issn{0791-5985}%
+  \gdef\@eissn{}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Journal of Clinical Speech and Language Studies}%
   \global\@twocolumntrue
   \gdef\ios@journal@layout{0}%
   }
@@ -399,6 +437,22 @@
     \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
     }%
   }
+\DeclareOption{ves}{%
+  \gdef\@jid{ves}
+  \gdef\@JID{VES}
+  \gdef\@issn{0957-4271}
+  \gdef\@eissn{1878-6464}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Journal of Vestibular Research}
+  \gdef\ios@journal@layout{1}%
+  \global\@twocolumnfalse \global\@restonecoltrue
+  \gdef\eleven@pt{}%
+  \def\tagbib@style{bibstyle2}% IOS 2
+  \global\@nameyeartrue
+  \AtBeginDocument{%
+    \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
+    }%
+  }
 %% <<< 1 layout <<<
 
 %% >>> 2 layout >>>
@@ -410,7 +464,11 @@
   \gdef\@price{35.00}%
   \gdef\@journal{AI Communications}
   \gdef\ios@journal@layout{2}%
-  \global\@twocolumntrue \global\@restonecolfalse
+  \ifnum\jobstart@date@info>20210304\relax
+    \global\@twocolumnfalse \global\@restonecoltrue
+  \else
+    \global\@twocolumntrue \global\@restonecolfalse
+  \fi
   }
 \DeclareOption{rda}{%
   \gdef\@jid{rda}
@@ -513,29 +571,12 @@
 
 \ProcessOptions
 
-\RequirePackage{etoolbox}
-
 \expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
   \xdef\iosx@version{112}% \bid and \newtheoremstyle{plain} settings
   }{}%
 
-%% class cfg load
-\long\def\@if@vtex@in@house#1#2{%
-  \@ifundefined{vtex@in@house}
-    {#2}
-    {#1}%
-  }
-\IfFileExists{\fmt@name-vtex.cfg}
-  {%
-    \xdef\vtex@in@house{1}%
-    \input\fmt@name-vtex.cfg
-  }{%
-    \input\fmt@name.cfg
-  }
-
 \csuse{\fmt@name @load@dummy@layout}
 \csuse{\fmt@name @load@class@version@if}
-\csuse{\fmt@name @load@fileinfo}
 \csuse{\fmt@name @load@openaccess@check}
 \csuse{\fmt@name @load@vkt@cmn@md}
 
@@ -1158,11 +1199,24 @@
     \b@author@skip=-2\p@
     \dsreview@postskip=6\p@
   \fi
+  \ifnum\jobstart@date@info>20210528\relax
+    \AtEndOfClass{\mathindent=2em}%
+  \fi
   }
 \def\init@ios@journal@SAT@settings{%
   \gappto\@articletype@prehook{%
     \global\let\ios@pages@trimbox\ios@pages@trimbox@papersize
     }%
+  }
+\def\init@ios@journal@AIC@settings{%
+  \ifnum\jobstart@date@info>20210316\relax
+    \AtEndOfClass{\mathindent=2em}%
+  \fi
+  }
+\def\init@ios@journal@AIS@settings{%
+  \ifnum\jobstart@date@info>20210316\relax
+    \AtEndOfClass{\mathindent=2em}%
+  \fi
   }
 
 %% Fonts
