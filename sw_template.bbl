@@ -1,5 +1,5 @@
 \begin{thebibliography}{5}
-% BibTex style file: ios1.bst, 2017-04-26
+% BibTex style file: ios1.bst, 2019-01-11
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1} \fi
 \ifx \bauthor  \undefined \def \bauthor#1{#1} \fi

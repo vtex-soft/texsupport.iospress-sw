@@ -5,6 +5,7 @@
 %%   Semantic Web (SW)
 %%   Web Intelligence (WEB)
 %%   Journal of Clinical Speech and Language Studies (ACS)
+%%   Journal of Smart Cities and Society (SCS)
 %%  -
 %%   Argument & Computation (AAC)
 %%   Applied Ontology (AO)
@@ -69,8 +70,8 @@
 %%
 
 \def\fmt@name{iosart2x}
-\def\fmt@date{2021/05/28}
-\def\fmt@version{1.3.31}
+\def\fmt@date{2021/05/31}
+\def\fmt@version{1.3.33}
 \NeedsTeXFormat{LaTeX2e}[2000/01/26]
 \ProvidesClass\fmt@name
               [\fmt@date\space v\fmt@version\space IOS Press]
@@ -97,6 +98,11 @@
   }
 
 \csuse{\fmt@name @load@fileinfo}
+
+% Load flushend
+\newif\if@load@flushend \@load@flushendtrue
+\DeclareOption{flushend}{\@load@flushendtrue}
+\DeclareOption{noflushend}{\@load@flushendfalse}
 
 \DeclareOption{10pt}{\let\eleven@pt\relax}
 \DeclareOption{11pt}{\def\eleven@pt{}}
@@ -177,6 +183,17 @@
   \fi
   }
 
+\let\do@layout\@gobble
+\protected\def\dolayoutbyjid#1#2{%
+  \let\do@layout\@gobble
+  \@for\tmp@jid:=#1\do{%
+    \ifx\tmp@jid\@jid
+      \let\do@layout\@firstofone
+    \fi
+  }%
+  \do@layout{#2}%
+}
+  
 \gdef\ios@journal@layout{-1}%
 
 %% >>> 0 layout >>>
@@ -187,11 +204,7 @@
   \gdef\@eissn{1876-1372}%
   \gdef\@price{35.00}%
   \gdef\@journal{Journal of Ambient Intelligence and Smart Environments}%
-  \ifnum\jobstart@date@info>20210304\relax
-    \global\@twocolumnfalse \global\@restonecoltrue
-  \else
-    \global\@twocolumntrue
-  \fi
+  \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\ios@journal@layout{0}%
   }
 \DeclareOption{sw}{%
@@ -201,11 +214,7 @@
   \gdef\@eissn{2210-4968}%
   \gdef\@price{35.00}%
   \gdef\@journal{Semantic Web}%
-  \ifnum\jobstart@date@info>20210528\relax
-    \global\@twocolumnfalse \global\@restonecoltrue
-  \else
-    \global\@twocolumntrue
-  \fi
+  \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\ios@journal@layout{0}%
   }
 \DeclareOption{web}{%
@@ -226,6 +235,16 @@
   \gdef\@price{35.00}%
   \gdef\@journal{Journal of Clinical Speech and Language Studies}%
   \global\@twocolumntrue
+  \gdef\ios@journal@layout{0}%
+  }
+\DeclareOption{scs}{%
+  \gdef\@jid{scs}%
+  \gdef\@JID{SCS}%
+  \gdef\@issn{2772-3577}%
+  \gdef\@eissn{2772-3585}%
+  \gdef\@price{35.00}%
+  \gdef\@journal{Journal of Smart Cities and Society}%
+  \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\ios@journal@layout{0}%
   }
 %% <<< 0 layout <<<
@@ -327,6 +346,7 @@
   \def\tagbib@style{bibstyle2}% IOS 2
   \global\@nameyeartrue
   \AtBeginDocument{%
+    \def\copyright@size{\footnotesize}%
     \global\def\esm@skip@suppress{\dimexpr-3.5\baselineskip\relax}%
     }%
   }
@@ -336,7 +356,7 @@
   \gdef\@issn{0167-5265}%
   \gdef\@eissn{1875-8789}%
   \gdef\@price{35.00}%
-  \gdef\@journal{Information Services \&  Use}
+  \gdef\@journal{Information Services \& Use}
   \gdef\ios@journal@layout{1}%
   \global\@twocolumnfalse \global\@restonecoltrue
   \gdef\eleven@pt{}%
@@ -464,11 +484,7 @@
   \gdef\@price{35.00}%
   \gdef\@journal{AI Communications}
   \gdef\ios@journal@layout{2}%
-  \ifnum\jobstart@date@info>20210304\relax
-    \global\@twocolumnfalse \global\@restonecoltrue
-  \else
-    \global\@twocolumntrue \global\@restonecolfalse
-  \fi
+  \global\@twocolumnfalse \global\@restonecoltrue
   }
 \DeclareOption{rda}{%
   \gdef\@jid{rda}
@@ -557,23 +573,12 @@
 %% <<< Meta layout <<<
 
 %% class versions for users
-\def\iosx@version{100}% initial version
-\DeclareOption{v1.0.1}{\xdef\iosx@version{101}\wlog{\fmt@name\space user version 1.0.1: math cases non-display style}}
-\DeclareOption{v1.0.2}{\xdef\iosx@version{102}\wlog{\fmt@name\space user version 1.0.2: upqed at end of line}}
-\DeclareOption{v1.0.3}{\xdef\iosx@version{103}\wlog{\fmt@name\space user version 1.0.3: 0 layout algorithms}}
-\DeclareOption{v1.0.4}{\xdef\iosx@version{104}\wlog{\fmt@name\space user version 1.0.4: new paragraph after theorem environment}}
-\DeclareOption{v1.1.0}{\xdef\iosx@version{110}\wlog{\fmt@name\space user version 1.1.0: no algorithm definitions}}
-\DeclareOption{v1.1.1}{\xdef\iosx@version{111}\wlog{\fmt@name\space user version 1.1.1: standard itshape in plain theorem style, standard @setref}}
-\DeclareOption{v1.1.2}{\xdef\iosx@version{112}\wlog{\fmt@name\space user version 1.1.2: bid syntax for doi output}}
+\def\iosx@version{112}% initial version
 
 \PassOptionsToPackage{fleqn}{amsmath}
 \ExecuteOptions{twoside,final,openright,fleqn}
 
 \ProcessOptions
-
-\expandafter\ifstrequal\expandafter{\@JID}{SAT}{%
-  \xdef\iosx@version{112}% \bid and \newtheoremstyle{plain} settings
-  }{}%
 
 \csuse{\fmt@name @load@dummy@layout}
 \csuse{\fmt@name @load@class@version@if}
@@ -647,17 +652,6 @@
   \skip\@mpfootins=\skip\footins
   \def\biblio@clubpenalty{8000}
   \def\biblio@widowpenalty{7000}
-  \@ifversionge{111}
-    {}
-    {%
-      \if@nameyear
-      \else
-        \renewcommand\NAT@open{\textup{[}}%
-        \renewcommand\NAT@close{\textup{]}}%
-        \renewcommand\NAT@sep{\textup{,}}%
-      \fi
-      \def\citenumfont##1{\textup{##1}}%
-    }%
   \def\NAT@penalty{\penalty=50}
   \setlength{\bibhang}{12pt}
   \bibsep=\z@ \@plus.5\p@
@@ -669,9 +663,7 @@
   }
 \@namedef{init@ios@journal@0@layout}{%
   \AtEndOfClass{%
-    \ifnum\jobstart@date@info>20201209\relax
-      \mathindent=\z@
-    \fi
+    \mathindent=\z@
     }%
   }%
 \@namedef{init@ios@journal@1@layout}{% B type from ios2a
@@ -697,11 +689,7 @@
 \@namedef{init@ios@journal@2@layout}{% A type from ios2a
   \common@settings@from@ios@two@a
   \AtEndOfClass{%
-    \ifnum\jobstart@date@info>20201209\relax
-      \mathindent=\z@
-    \else
-      \mathindent=20\p@
-    \fi
+    \mathindent=\z@
     }
   \setlength\tablewidth{217.66pt}
   \leftmargini=25pt
@@ -807,9 +795,7 @@
     \aftergroup\@afterheading
     }
   \let\bibfont\normalsize
-  \@ifversionge{111}
-    {\renewcommand\NAT@sep{,\NAT@penalty}}
-    {\renewcommand\NAT@sep{\textup{,}\NAT@penalty}}%
+  \renewcommand\NAT@sep{,\NAT@penalty}
   \def\section@style{\fontsize{13}{15}\bfseries\selectfont\mathversion{bold}\nohyphen\raggedright}
   \def\sectionpart@style{\fontsize{13}{15}\bfseries\selectfont\mathversion{bold}\nohyphen\raggedright}
   \def\subsection@style{\fontsize{11}{13}\bfseries\selectfont\nohyphen\raggedright}
@@ -864,12 +850,14 @@
     \def\href##1##2{\ioscom@href{##1}{\texttt{##2}}}
     }
   }
+
 \newif\if@make@lua@auth@ \@make@lua@auth@false
 \ifdefined\HCode\else
   \ifnum\ios@journal@layout=5\relax
     \@make@lua@auth@true
   \fi
 \fi
+
 \@namedef{init@ios@journal@5@layout}{% SAT
   \hoffset=-0.88in
   \voffset=-1.8mm
@@ -942,7 +930,6 @@
     \def\standard@copyright@line{%
       \ifnum\the\@pubyear<2021\relax
       \else
-        %\@eissn/\the@copyearfrom\the@copyear\copyright@price\ %
         \@eissn\copyright@price\ %
       \fi
       \copyright@statement
@@ -1005,7 +992,6 @@
   \def\section@style{\fontsize{12}{14}\selectfont\bfseries\mathversion{bold}\nohyphen\raggedright}%
   \def\subsection@style{\normalsize\bfseries\mathversion{bold}\nohyphen\raggedright}%
   \def\subsubsection@style{\normalsize\selectfont\scshape\mathversion{bold}\nohyphen\raggedright}%
-  %\@afterindentfalse
   \renewcommand\section{%
     \@startsection{section}{1}{\z@}%
       {-\section@beforeskip}%
@@ -1061,12 +1047,8 @@
   \let\bibfont\normalsize
   \bibsep=9\p@\@plus.5\p@\@minus.5\p@
   %
-  %\usepackage[dvipsnames]{xcolor}%
-  %\definecolor{NavyBlue}{rgb}{0,0.45,0.73}%
-  %\definecolor{NavyBlue}{rgb}{0.03,0.43,0.74}%
   \definecolor{NavyBlue}{rgb}{0.1,0.45,0.82}%
   \definecolor{WildStrawberry}{rgb}{0.93,0.23,0.43}%
-  %\definecolor{Maroon}{rgb}{0.73,0.19,0.20}%
   \definecolor{Maroon}{rgb}{0.5,0,0}%
   \AtBeginDocument{%
     \hypersetup{%
@@ -1195,13 +1177,9 @@
   \def\@publisheraddress{Akademijos 4, LT-08663 Vilnius, Lithuania}
   }
 \def\init@ios@journal@SW@settings{%
-  \ifnum\jobstart@date@info>20170523\relax
-    \b@author@skip=-2\p@
-    \dsreview@postskip=6\p@
-  \fi
-  \ifnum\jobstart@date@info>20210528\relax
-    \AtEndOfClass{\mathindent=2em}%
-  \fi
+  \b@author@skip=-2\p@
+  \dsreview@postskip=6\p@
+  \AtEndOfClass{\mathindent=2em}%
   }
 \def\init@ios@journal@SAT@settings{%
   \gappto\@articletype@prehook{%
@@ -1209,16 +1187,15 @@
     }%
   }
 \def\init@ios@journal@AIC@settings{%
-  \ifnum\jobstart@date@info>20210316\relax
     \AtEndOfClass{\mathindent=2em}%
-  \fi
   }
 \def\init@ios@journal@AIS@settings{%
-  \ifnum\jobstart@date@info>20210316\relax
     \AtEndOfClass{\mathindent=2em}%
-  \fi
   }
-
+\def\init@ios@journal@SCS@settings{%
+  \AtEndOfClass{\mathindent=2em}%
+  }
+  
 %% Fonts
 \ifnum\ios@journal@layout>\z@
   \def\@xipt{11}
@@ -1407,7 +1384,7 @@
 \def\footnoterule@width{\the\columnwidth}
 \setlength\columnseprule{0\p@}
 
-\csuse{\fmt@name @load@pagecrop}
+\csuse{\fmt@name @load@vtexoutputpage}
 
 \gappto\PROOF{%
   \AtBeginDocument{%
@@ -1456,15 +1433,19 @@
       }%
     }%
   }
+
+\@ifundefined{idline@raise}{\def\idline@raise{}}{}
+
 \def\journal@idline{%
-  \raise3pc\hbox{%
-    \special{vtex:bmc.artifact.idline}% for dvi differ
+  \idline@raise
+  \hbox{%
+    % \special{vtex:bmc.artifact.idline}% for dvi differ
     \parbox[t]{\textwidth}{%
       \@id@line@text
       \fp@id@line@addon
       \global\let\fp@id@line@addon\relax
       }%
-    \special{vtex:emc.artifact.idline}%
+    % \special{vtex:emc.artifact.idline}%
     }%
   }
 \def\@id@line{\journal@idline}%
@@ -1765,7 +1746,6 @@
 
 \def\CC@BY@NC@license@text{%
   \ifnum\the\@pubyear<2021\relax
-    \ifnum\jobstart@date@info>20160706\relax
       This article is published online with Open Access and distributed under
       the terms of the Creative Commons Attribution Non-Commercial Li%
       \ifnum\ios@journal@layout=5
@@ -1776,10 +1756,6 @@
         \fi
       \fi
       cense (CC BY-NC 4.0).%
-    \else
-      This article is published online with Open Access and distributed under
-      the terms of the Creative Commons Attribution Non-Commercial License.%
-    \fi
   \else
     This is an Open Access article distributed under the terms of the
     Creative Commons Attribution-NonCommercial License (\href{https://creativecommons.org/licenses/by-nc/4.0/}{CC BY-NC 4.0}).%
@@ -1797,11 +1773,7 @@
 \def\license@text{%
   \ifdefined\license@type
   \else
-    \ifnum\jobstart@date@info<20181205\relax
-      \def\license@type{CC@BY@NC}%
-    \else
-      \vtxClassError{\fmt@name}{\string\setpkgattr{license}{type}{} should be filled for Open Access articles. Possible Open Access license values: CC@BY@NC, CC@BY}{}%
-    \fi
+    \vtxClassError{\fmt@name}{\string\setpkgattr{license}{type}{} should be filled for Open Access articles. Possible Open Access license values: CC@BY@NC, CC@BY}{}%
   \fi
   \csname\license@type @license@text\endcsname
   }
@@ -1816,9 +1788,8 @@
       \fi
     \fi
   \fi
-  }%
+  }
 \def\standard@copyright@line{%
-  %\@issn/\the@copyearfrom\the@copyear\copyright@price\ %
   \@issn\copyright@price\ %
   \copyright@statement
   }
@@ -1835,7 +1806,7 @@
   }
 \def\@copyright{%
   \expandafter\ifstrequal\expandafter{\@JID}{ICG}{%
-    \vskip-2.5\baselineskip
+    \vskip-2\baselineskip
     }{}%
   \expandafter\ifstrequal\expandafter{\@JID}{FRL}{%
     \vskip-2.5\baselineskip
@@ -1855,7 +1826,7 @@
     \fi
   \fi
   \copyright@line
-  }%
+  }
 
 %% Footnote
 \def\footnoterule{%
@@ -2047,51 +2018,34 @@
     {\enumerate@}
     {\enumerate@[\max@enumlabel]}%
   }
-\ifnum\jobstart@date@info>20171108\relax
-  \def\enumerate@[#1]{%
-    \ifnum\@enumdepth>4\relax
-      \@toodeep
-    \else
-      \advance\@enumdepth\@ne
-      \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
-      \list{\csname label\@enumctr\endcsname}{%
-        \usecounter{\@enumctr}%
-        \def\makelabel##1{{\hfill\rm ##1}}%
-        \settowidth{\labelwidth}{#1}%
-        \advance\labelwidth by\parindent
-        \labelsep=0.5em
-        \leftmargin=\z@
-        \rightmargin=\z@
-        \itemindent=\labelwidth
-        \advance\itemindent\labelsep
-        \leftmargin=\the\itemindent
-        \itemindent=\z@
-        \partopsep=\z@
-        \topsep=\smallskipamount
-        \parsep=\z@
-        \itemsep=\z@
-        \listparindent=\z@
-        }%
-    \fi
-    \setenumlabel{1.}%
-    }
-\else
-  %% old code with wrong syntax (missing percents at line endings, etc.)
-  \def\enumerate@[#1]{%
-    \ifnum \@enumdepth >4 \@toodeep\else
-    \advance\@enumdepth \@ne
+\def\enumerate@[#1]{%
+  \fix@thm@list
+  \ifnum\@enumdepth>4\relax
+    \@toodeep
+  \else
+    \advance\@enumdepth\@ne
     \edef\@enumctr{enum\romannumeral\the\@enumdepth}%
-    \list {\csname label\@enumctr\endcsname}%
-    {\usecounter{\@enumctr}\def\makelabel##1{{\hfill\rm ##1}}
-    \settowidth{\labelwidth}{#1}
-    \advance\labelwidth by\parindent \labelsep=0.5em
-    \leftmargin\z@ \rightmargin\z@ \itemindent=\labelwidth
-           \advance\itemindent\labelsep
-           \leftmargin=\the\itemindent\itemindent=\z@
-           \partopsep\z@ \topsep\smallskipamount \parsep\z@ \itemsep\z@ %\@rightskip\z@ plus 1fil
-    \listparindent\z@}\fi\setenumlabel{1.}%
-    }
-\fi
+    \list{\csname label\@enumctr\endcsname}{%
+      \usecounter{\@enumctr}%
+      \def\makelabel##1{{\hfill\rm ##1}}%
+      \settowidth{\labelwidth}{#1}%
+      \advance\labelwidth by\parindent
+      \labelsep=0.5em
+      \leftmargin=\z@
+      \rightmargin=\z@
+      \itemindent=\labelwidth
+      \advance\itemindent\labelsep
+      \leftmargin=\the\itemindent
+      \itemindent=\z@
+      \partopsep=\z@
+      \topsep=\smallskipamount
+      \parsep=\z@
+      \itemsep=\z@
+      \listparindent=\z@
+      }%
+  \fi
+  \setenumlabel{1.}%
+  }
 
 \RequirePackage{keyval}
 \newcommand\labelitemi{\normalfont\bfseries\textendash}
@@ -2105,8 +2059,9 @@
     {\itemize@}
     {\itemize@[]}%
   }
-\ifnum\jobstart@date@info>20171108\relax
-  \def\itemize@[#1]{%
+  
+\def\itemize@[#1]{%
+    \fix@thm@list
     \ifnum\@itemdepth>4\relax
       \@toodeep
     \else
@@ -2135,26 +2090,10 @@
         }%
     \fi
     }
-\else
-  %% old code with wrong syntax (missing percents at line endings, etc.)
-  \def\itemize@[#1]{%
-    \ifnum \@itemdepth >4 \@toodeep\else
-    \advance\@itemdepth \@ne
-    \edef\@itemitem{labelitem\romannumeral\the\@itemdepth}%
-    \if.#1. \else\def\@@tempa{#1}\edef\@itemitem{@@tempa}\fi\list
-    {\csname\@itemitem\endcsname}{\settowidth{\labelwidth}
-                  {\csname\@itemitem\endcsname}
-                  \def\makelabel##1{##1}\labelsep=0.5em%ST
-          \itemindent=\labelwidth \advance\itemindent\labelsep
-                  \advance\itemindent\@itemize@indent
-          \leftmargin\the\itemindent \itemindent=\z@
-                  \partopsep\z@ \topsep\smallskipamount \parsep\z@ %\@rightskip\z@ plus 1fil
-          \itemsep\z@ \listparindent\z@} \fi
-    }
-\fi
 
 \newenvironment{description}%
   {%
+    \fix@thm@list
     \list{}{%
       \labelwidth=\z@
       \itemindent=-\leftmargin
@@ -2251,9 +2190,7 @@
     \xdef\abbrgroup@@labelwidth{\the\@tempdima}%
   \fi
   #1%
-  \ifnum\jobstart@date@info>20170424\relax
-    \hfill
-  \fi
+  \hfill
   }
 
 %% list label correction
@@ -2311,9 +2248,6 @@
   \renewcommand\theequation{\@arabic\c@equation}
 \fi
 
-\ifnum\ios@journal@layout>\z@
-  \csuse{\fmt@name @load@vsfleqn2}
-\fi
 
 \RequirePackage[T1]{fontenc}
 \RequirePackage{times}
@@ -2336,6 +2270,41 @@
 \RequirePackage{amssymb}
 \allowdisplaybreaks
 
+%% Tarp teoremos ir listo reikia ideti \quitvmode, kad 
+%% itemas prasidedu is naujos eilutes. Aplinku sekima darome per \penalty 1234
+\def\vtx@theorem@marker{1234}
+\def\vtx@theorem@penalty{\penalty\vtx@theorem@marker}
+\def\fix@thm@list{%
+  \ifnum\the\lastpenalty=\vtx@theorem@marker\relax
+    \quitvmode
+  \fi
+  }
+
+\def\@begintheorem#1#2[#3]{%
+  \deferred@thm@head{\the\thm@headfont \thm@indent
+    \@ifempty{#1}{\let\thmname\@gobble}{\let\thmname\@iden}%
+    \@ifempty{#2}{\let\thmnumber\@gobble}{\let\thmnumber\@iden}%
+    \@ifempty{#3}{\let\thmnote\@gobble}{\let\thmnote\@iden}%
+    \thm@swap\swappedhead\thmhead{#1}{#2}{#3}%
+    \the\thm@headpunct
+    \thmheadnl % possibly a newline.
+    \hskip\thm@headsep
+  }%
+  \vtx@theorem@penalty
+  \ignorespaces}
+
+% gather fix to raise error on \label + \nonumber in one row
+\def\math@cr@@@gather{%
+  \ifst@rred\nonumber\fi
+  &\if@eqnsw \global\tag@true \fi\relax
+  \iftag@
+      \make@display@tag
+  \fi
+  \ifst@rred\else\global\@eqnswtrue\fi
+  \global\advance\row@\@ne
+  \cr
+  }
+
 \csuse{\fmt@name @load@alt@mathtime}
 
 \ifnum\ios@journal@layout>\z@
@@ -2351,10 +2320,6 @@
   \DeclareMathSizes{25}{25}{16}{12}
 \fi
 
-\ifnum\ios@journal@layout>\z@
-  \csuse{\fmt@name @load@vtexsavepos}
-  \csuse{\fmt@name @last@display}
-\fi
 
 \def\amsarraycolsep{\arraycolsep=5\p@}
 %% command for changing arraycolsep:
@@ -2386,15 +2351,7 @@
 \ifnum\ios@journal@layout>\z@
   \def\mathend@qed{%
     \hbox to\hsize{%
-      \@ifversionge{102}
-        {%
-          \hfill$\Box$%
-        }{%
-          \@@vtexpos\ios@last@display@id
-          \edef\mathend@ypos@id{ioslastdisplay-\pagepos-ypos-\ypos}%
-          \@@vtexpos\mathend@ypos@id
-          \hskip\xpos\quad$\Box$%
-        }%
+      \hfill$\Box$%
       }%
     }%
   \def\upqed{%
@@ -2438,16 +2395,9 @@
       \endtrivlist
       \@endpetrue
     }
-  \@ifversionge{111}
-    {%
-      \newtheoremstyle{plain}
-        {\medskipamount}{\medskipamount}{\normalfont\itshape}{}%
-        {\normalfont\bfseries}{.}{.5em}{}%
-    }{%
-      \newtheoremstyle{plain}
-        {\medskipamount}{\medskipamount}{\normalfont\xishape}{}%
-        {\normalfont\bfseries}{.}{.5em}{}%
-    }
+    \newtheoremstyle{plain}
+      {\medskipamount}{\medskipamount}{\normalfont\itshape}{}%
+      {\normalfont\bfseries}{.}{.5em}{}%
   \newtheoremstyle{remark}
     {\medskipamount}{\medskipamount}{\normalfont\upshape}{}%
     {\normalfont\bfseries}{.}{.5em}{}%
@@ -2455,11 +2405,8 @@
   \g@addto@macro\endproof{\@endpetrue}%
 \fi
 
-\@ifversionge{104}
-  {%
-    \g@addto@macro\@endtheorem{\@endpefalse}%
-    \g@addto@macro\endproof{\@endpefalse}%
-  }{}%
+\g@addto@macro\@endtheorem{\@endpefalse}%
+\g@addto@macro\endproof{\@endpefalse}%
 
 %% Floats
 \newcounter{figure}
@@ -2646,90 +2593,6 @@
     }
 \fi
 
-\@ifversionge{110}
-  {}
-  {%
-    \newcounter{algorithm}
-    \if@secfloat
-      \@addtoreset{algorithm}{section}
-      \renewcommand\thealgorithm{\thesection.\@arabic\c@algorithm}
-    \else
-      \renewcommand\thealgorithm{\@arabic\c@algorithm}
-    \fi
-    \def\fps@algorithm{tbp}
-    \def\ftype@algorithm{4}
-    \def\ext@algorithm{loa}
-    \def\fnum@algorithm{\algorithmname~\thealgorithm.}
-    \let\algo@pre@rule\relax
-    \let\algo@post@rule\relax
-    \let\algo@cap@rule\relax
-    \newenvironment{algorithm}
-      {%
-        \let\@makecaption\@makealgorithmcaption
-        \let\@floatboxreset\@algorithmboxreset
-        \@float{algorithm}%
-      }{%
-        \algo@post@rule
-        \end@float
-      }
-    \newenvironment{algorithm*}
-      {%
-        \let\@makecaption\@makealgorithmcaption
-        \let\@floatboxreset\@algorithmboxreset
-        \@dblfloat{algorithm}%
-      }{%
-        \algo@post@rule
-        \end@dblfloat
-      }
-    \let\algo@box@reset@centering\centering
-    \def\@algorithmboxreset{%
-      \reset@font
-      \algo@box@reset@centering
-      \@setnobreak
-      \@setminipage
-      }
-    \ifnum\ios@journal@layout=\z@
-      \let\algo@box@reset@centering\relax
-    \fi
-    \def\algo@caption@size{\small}
-    \long\def\@makealgorithmcaption#1#2{%
-      \vskip2ex
-      \algo@caption@size
-      \algo@pre@rule
-      \hbox to \hsize{\parbox[t]{\hsize}{{\bf #1} #2}}%
-      \algo@post@rule
-      }
-    \def\programcode{%
-      \let\@makealgorithmcaption\@makefigurecaption
-      \def\algorithmname{Program Code}%
-      }
-    \ifnum\ios@journal@layout>\z@
-      \def\algo@cap@rule{\kern2\p@\hrule\@height.8\p@\@depth\z@}
-      \def\algo@pre@rule{\hrule\@height.8\p@\@depth\z@\kern2\p@}
-      \def\algo@post@rule{\kern2\p@\hrule\@height.8\p@\@depth\z@\kern2\p@}
-      \g@addto@macro\doc@stage@hook{%
-        \@ifpackageloaded{algorithm2e}
-          {%
-            \renewcommand{\algocf@capseparator}{.}%
-            \RestyleAlgo{ruled}%
-          }{}%
-        \@ifpackageloaded{algorithm}
-          {%
-            \def\fnum@algorithm{\fname@algorithm~\thealgorithm.}%
-          }{}%
-        }
-    \else
-      \@ifversionge{103}
-        {%
-          \def\fnum@algorithm{\algorithmname~\thealgorithm}
-          \def\algo@cap@rule{\kern2\p@\hrule\@height.8\p@\@depth\z@}
-          \def\algo@pre@rule{\hrule\@height.8\p@\@depth\z@\kern2\p@}
-          \def\algo@post@rule{\kern2\p@\hrule\@height.8\p@\@depth\z@\kern2\p@}
-          \def\algo@caption@size{}
-        }{}
-    \fi
-  }%v1.1.0 end
-
 %% Compatibility with old latex
 \DeclareOldFontCommand{\rm}{\normalfont\rmfamily}{\mathrm}
 \DeclareOldFontCommand{\sf}{\normalfont\sffamily}{\mathsf}
@@ -2782,15 +2645,11 @@
 \fi
 
 \csuse{\fmt@name @natbib@setup}
-\ifnum\jobstart@date@info>20170322\relax
-  \long\def\bibfont{%
-    \footnotesize
-    \baselineskip=\dimexpr1\baselineskip\@plus.5\p@\relax
-    }
-  \bibsep=\z@\@plus.5\p@
-\else
-  \let\bibfont\footnotesize
-\fi
+\long\def\bibfont{%
+  \footnotesize
+  \baselineskip=\dimexpr1\baselineskip\@plus.5\p@\relax
+  }
+\bibsep=\z@\@plus.5\p@
 \let\endbibitem\relax
 
 \RequirePackage{color}
@@ -2978,8 +2837,7 @@
 \newtoks\t@loc@notes
 \newcount\note@cnt
 \newcounter{author}
-\newcount\n@author
-\def\n@author@{}
+\newcount\n@authors
 \newcounter{address}
 \newdimen\sv@mathsurround
 \newcount\sv@hyphenpenalty
@@ -3161,32 +3019,31 @@
     \fi
     \glob@notes@out{#2}}}%
   \ignorespaces
+  }
+  
+\def\check@for@email#1\printead#2\printead{%
+  \if.#2.%
+  \else
+    \raggedright
+  \fi
   }%
-\ifnum\jobstart@date@info>20190212\relax
-  \def\check@for@email#1\printead#2\printead{%
-    \if.#2.%
-    \else
-      \raggedright
-    \fi
-    }%
-  \def\do#1{%
-    \def\par@jid{#1}%
-    \ifx\@jid\par@jid
-      \def\glob@notes@out##1{%
-        \setbox\@tempboxa\hbox{##1}%
-        \@tempdima=\dimexpr\parindent+\wd\@tempboxa+3\p@\relax
-        \ifdim\@tempdima>\columnwidth\relax
-          \let\printead@sav\printead
-          \let\printead\relax
-          \check@for@email##1\printead\printead
-          \let\printead\printead@sav
-        \fi
-        ##1%
-        }%
-    \fi
-    }
-  \docsvlist{ais,aic,sw,web}%
-\fi
+\def\do#1{%
+  \def\par@jid{#1}%
+  \ifx\@jid\par@jid
+    \def\glob@notes@out##1{%
+      \setbox\@tempboxa\hbox{##1}%
+      \@tempdima=\dimexpr\parindent+\wd\@tempboxa+3\p@\relax
+      \ifdim\@tempdima>\columnwidth\relax
+        \let\printead@sav\printead
+        \let\printead\relax
+        \check@for@email##1\printead\printead
+        \let\printead\printead@sav
+      \fi
+      ##1%
+      }%
+  \fi
+  }
+\docsvlist{ais,aic,sw,web,scs}%
 
 \def\fm@textsuperscript#1{%
   \textsuperscript{\upshape #1}%
@@ -3210,8 +3067,8 @@
   \global\c@author=\z@
   \global\c@address=\z@
   \sv@mathsurround=\mathsurround\m@th
-  \global\n@author=0\n@author@\relax
-  \global\advance\n@author\m@ne
+  % \global\n@authors=0\the\n@authors\relax
+  % \global\advance\n@authors\m@ne
   \global\@firstauthortrue
   \global\@hasabstractfalse
   \global\@prefacefalse
@@ -3225,8 +3082,8 @@
 
 \def\endfrontmatter{%
   \global\c@footnote=\c@sv@footnote
-  \global\n@author=\c@author
-  \@writecount
+  % \global\n@authors=\the\c@author
+  % \@writecount
   \csname form@runauthors\endcsname
   \@if@vtex@in@house
     {%
@@ -3310,10 +3167,9 @@
       \addto@authors@list{, }%
     \fi
     \addto@authors@list{%
-      \@nameuse{\short@journal @fnmsmd@\the\@tempcnta @author}%
       \@ifundefined{\short@journal @fnmsmd@\the\@tempcnta @author}
         {}
-        { }%
+        {\@nameuse{\short@journal @fnmsmd@\the\@tempcnta @author} }%
       \@nameuse{\short@journal @snm@\the\@tempcnta @author}%
       }%
     }%
@@ -3421,9 +3277,9 @@
   \global\rightskip=\@rightskip
   \global\parfillskip=\@flushglue
   }
-\def\@writecount{%
-  \write\@mainaux{\string\global\string\@namedef{n@author@}{\the\n@author}}%
-  }
+% \def\@writecount{%
+  % \write\@mainaux{\string\global\string\n@authors=\the\c@author}%
+  % }
 
 \def\@pretitle@output#1{#1}
 \def\@pretitle@hrule{\hrule}
@@ -3583,13 +3439,9 @@
     \fi
     \stepcounter{review}%
     \setcounter{reviewauthor}{0}%
-    \ifnum\jobstart@date@info>20170704\relax
-      \def\author{%
-        \vtxClassError{\fmt@name}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}{}%
-        }%
-    \else
-      \let\author\reviewer
-    \fi
+    \def\author{%
+      \vtxClassError{\fmt@name}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}{}%
+      }%
     \review@size
     \@nameuse{review@#1@settings}%
     \reviewname@fmt{\reviewname}%
@@ -3637,13 +3489,9 @@
     \def\@next@{%
       \global\dsreview@toks\expandafter{\the\dsreview@toks#2}%
       %% review author setup
-      \ifnum\jobstart@date@info>20170704\relax
-        \def\author{%
-          \vtxClassError{\fmt@name}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}{}%
-          }%
-      \else
-        \let\author\reviewer
-      \fi
+      \def\author{%
+        \vtxClassError{\fmt@name}{^^J\string\reviewer{} command must be used inside \string{review\string} environment}{}%
+        }%
       \count@reviewers{\the\dsreview@toks}%
       \ifnum\c@review=\z@
         \vskip\dsreview@preskip
@@ -3671,16 +3519,37 @@
   \fi
   \@next@
   }
-\ifnum\jobstart@date@info>20170523\relax
-  \let\review\dsreview
-  \let\endreview\enddsreview
-\fi
+
+\let\review\dsreview
+\let\endreview\enddsreview
 
 \@ifundefined{short@journal}
   {\let\short@journal\@jid}
   {}
 
 \csuse{\fmt@name @vkt@cmn@fm@add}
+
+% AUG - author block
+\newtoks\aug@toks
+\def\add@to@aug@tok#1#2#3{%
+  \global\aug@toks=\expandafter{\the\aug@toks #1#2{#3}}%
+  }  
+\def\collect@author#1#{%
+  \global\advance\n@authors by 1
+  \add@to@aug@tok{\author}{#1}% 
+  }
+\def\collect@address#1#{%
+  \add@to@aug@tok{\address}{#1}% 
+  }
+
+\newenvironment{aug}{%
+    \setbox\@tempboxa=\hbox\bgroup
+    \let\author\collect@author
+    \let\address\collect@address
+  }{%
+    \egroup
+    \the\aug@toks
+  }
 
 \def\author{%
   \@ifnextchar[%
@@ -3694,7 +3563,7 @@
   \beg@elem
   \def\degs##1{##1}%
   \@ifundefined{prefix@\the\c@author @tmp}
-    {\@namedef{prefix@\the\c@author @tmp}{}}
+    {\global\@namedef{prefix@\the\c@author @tmp}{}}
     {}%
   \def\prefix##1{%
     \protect\protected@write\@auxout{}{\string\global\string\@namedef{prefix@\the\c@author @tmp}{##1 }}%
@@ -3850,11 +3719,87 @@
       \break
     \fi
   \fi
+  \output@author@sep
   }
+
+\def\output@author@sep{%  
+  \ifnum\n@authors>\z@
+    \sep@by@num@in@seq
+      {\the\c@author}%
+      {\the\n@authors}%
+      {\authors@septwo}%
+      {\authors@sepmid}%
+      {\authors@seplast}%
+      {\authors@endgraf}%
+  \fi
+  }
+
+\def\authors@septwo{ and }
+\def\authors@sepmid{, }
+\def\authors@seplast{ and }
+\def\authors@endgraf{}
+  
+\dolayoutbyjid{com,sat}{
+  \def\authors@septwo{}
+  \def\authors@sepmid{}
+  \def\authors@seplast{}
+  \def\authors@endgraf{}
+  }
+
+%% x'so testavimui  
+% \let\output@author@sep\empty
+  
+  
+%%% SEP BY NUMBER IN SEQUENCE: FOR AUTHOR, ADDRESS, ETC SEP %%%
+% #1 - current number in sequence (NUM)
+% #2 - number of sequence elements (MAX)
+% #3 - punctuation after element, when MAX = 2 and NUM < MAX        e.g., word 'and'
+% #4 - punctuation after element, when MAX > 2 and (MAX-NUM) > 1    e.g., comma
+% #5 - punctuation after element, when MAX > 2 and (MAX-NUM) = 1    e.g., comma and word 'and'
+% #6 - punctuation after element, when MAX = NUM                    e.g., period
+\def\sep@by@num@in@seq@error#1{\@latex@error{#1}\@ehc}
+\def\sep@by@num@in@seq#1#2#3#4#5#6{%
+    \ifnum#1>\numexpr#2\relax
+        \sep@by@num@in@seq@error{First argument of command \string\@sep@by@num@in@seq\space 
+            '#1' can not be greater than second '#2'}%
+    \fi
+    \ifnum#1<\@ne
+        \sep@by@num@in@seq@error{First argument of command \string\@sep@by@num@in@seq\space 
+            '#1' can not be smaller than 1}%
+    \fi
+    \ifnum#2>\z@
+        \ifnum#2>\@ne
+            \ifnum#2>\tw@
+                \ifnum#1<\numexpr#2\relax
+                    \ifnum\numexpr#2-#1\relax>\@ne
+                        #4%
+                    \else
+                        #5%
+                    \fi
+                \else
+                    #6%
+                \fi
+            \else
+                \ifnum#1<\numexpr#2\relax
+                    #3%
+                \else
+                    #6%
+                \fi
+            \fi
+        \else
+            #6%
+        \fi
+    \else
+        \sep@by@num@in@seq@error{Number of elements in command \string\@sep@by@num@in@seq\space 
+            '#2' must be greater than zero}%
+    \fi
+    }
+  
 \def\first@author{%
   \author@note@fmt
   \add@tok\t@glob@notes{\author@note@fmt}%
-  }%
+  }
+  
 \def\author@fmt@init{%
   \par
   \vskip\b@author@skip
@@ -3969,11 +3914,7 @@
     }%
 \fi
 
-\ifnum\jobstart@date@info>20170330\relax
-  \def\and{\unskip\ and }
-\else
-  \def\and{\unskip~and~}
-\fi
+\def\and{\unskip\ and }
 
 \def\author@note@fmt{%
   \def\thefootnote{\sxarabic{footnote}}%
@@ -4010,10 +3951,8 @@
 \def\email@prefix{e-mail:\ }
 \def\@email#1{{\email@prefix\email@href{#1}{#1}}}
 
-\ifnum\jobstart@date@info>20160307
-  \def\email@href#1#2{\href{mailto:#1}{#1}}
-  \def\email@prefix{}
-\fi
+\def\email@href#1#2{\href{mailto:#1}{#1}}
+\def\email@prefix{}
 
 \csuse{\fmt@name @load@printead}
 \appto\before@printead@hook{\def\ead@prefix@m@phone{Tels}}
@@ -4522,9 +4461,7 @@
 \gdef\refname{References}
 \newcommand\figurename{Fig.}
 \newcommand\tablename{Table}
-\@ifversionge{110}
-  {}
-  {\newcommand\algorithmname{Algorithm}}
+\newcommand\algorithmname{Algorithm}
 \newcommand\appendixname{Appendix}
 \newcommand\abstractname{Abstract}
 \newcommand\abstractname@fmt[1]{{\bfseries #1\abstractname@sep}}
@@ -4562,7 +4499,14 @@
 \frenchspacing
 \init@settings
 \if@twocolumn
-  \RequirePackage{flushend}
+  \if@load@flushend
+    \IfFileExists{flushend_v35.sty}
+      {\RequirePackage[nospread]{flushend_v35}}
+      {\RequirePackage[nospread]{flushend}}
+    %% Ijungiamas puslapio lauzimo metu ismetamu noad'u issaugojimas.
+    %% Juos galima panaudoti flushend ismestam tarpu sugrazinti per \atColsBreak{\pagediscards}
+    \savingvdiscards=1     
+  \fi
 \fi
 
 \if@twocolumn
@@ -4638,7 +4582,7 @@
 \csuse{\fmt@name @load@hypersetup}
 \csuse{\fmt@name @load@vtexhdvips}
 \setcounter{tocdepth}{3}
-\RequirePackage{breakurl}
+% \RequirePackage{breakurl}
 \csuse{\fmt@name @load@breakurl@hook}
 \csuse{\fmt@name @load@pagerefsout}
 
@@ -4654,27 +4598,6 @@
 \let\texttildelow\textasciitilde
 \preto\hyper@normalise{\let\texttildelow\hyper@tilde}
 
-\@ifversionge{111}
-  {}
-  {%
-    \ifnum\ios@journal@layout>\z@%
-      \gdef\@setref#1#2#3{% csname, extract group, refname
-        \ifx#1\relax
-          \protect\G@refundefinedtrue
-          \nfss@text{\reset@font\bfseries ??}%
-          \ClassWarning{iosart2x}{Reference `#3' on page \thepage \space undefined}%
-        \else
-          \bgroup
-            \ifmmode
-            \else
-              \upshape
-            \fi
-            \expandafter\Hy@setref@link#1\@empty\@empty\@nil{#2}%
-          \egroup
-        \fi
-        }%
-    \fi
-  }
 \@namedef{ios@section@level@1@sep}{}
 \@namedef{ios@section@level@2@sep}{}
 \@namedef{ios@section@level@3@sep}{}
@@ -4738,10 +4661,6 @@
 \let\tsup\textsuperscript
 \let\tsub\textsubscript
 
-\@ifversionge{101}
-  {}
-  {\gpreto\env@cases{\everymath{\displaystyle}}}
-
 \common@layout@settings
 \@nameuse{init@ios@journal@\ios@journal@layout @layout}
 \@nameuse{init@ios@journal@\@JID @settings}
@@ -4778,22 +4697,6 @@
   }
 \AtBeginDocument{\check@localdefs@status}%
 %% <<< startlocaldefs, endlocaldefs <<<
-
-%% greek letters for ASY are italic (except Gamma and Delta)
-\ifnum\jobstart@date@info<20150922\relax
-  \expandafter\ifstrequal\expandafter{\@JID}{ASY}
-    {%
-      \let\Theta\varTheta
-      \let\Lambda\varLambda
-      \let\Xi\varXi
-      \let\Pi\varPi
-      \let\Sigma\varSigma
-      \let\Upsilon\varUpsilon
-      \let\Phi\varPhi
-      \let\Psi\varPsi
-      \let\Omega\varOmega
-    }{}
-\fi
 
 %% commands for tex4ht
 \let\xmlEntryAlign\@gobble
@@ -4834,11 +4737,8 @@
 
 \csuse{\fmt@name @trimbox@settings}
 
-\@ifversionge{111}
-  {%
-    \let\eqref@fontshape\@firstofone
-    \def\eqref#1{\eqref@fontshape{(\ref{#1})}}%
-  }{}
+\let\eqref@fontshape\@firstofone
+\def\eqref#1{\eqref@fontshape{(\ref{#1})}}%
 
 \csuse{\fmt@name @check@floats}
 
@@ -4883,9 +4783,7 @@
 \setpkgattr{bidpmid}{sep}{:}
 \setpkgattr{pmid}{base}{https://www.ncbi.nlm.nih.gov/pubmed/}
 \csuse{\fmt@name @load@spliturlmacro}
-\@ifversionge{112}
-  {\let\bid\bbl@bid}
-  {}
+\let\bid\bbl@bid
 \csuse{\fmt@name @bptdefs}
 \let\bid@doi@space\relax
 \def\bid@doi@sep{:}
