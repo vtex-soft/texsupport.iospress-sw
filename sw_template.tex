@@ -31,15 +31,16 @@
 %Abbreviate US states, \cny{Country}\printead[presep={\\}]{e1}}
 
 % Two or more authors:
+\begin{aug}
 \author[A]{\inits{N.}\fnms{Name1} \snm{Surname1}\ead[label=e1]{first@somewhere.com}%
-\thanks{Corresponding author. \printead{e1}.}},
+\thanks{Corresponding author. \printead{e1}.}}
 \author[B]{\inits{N.N.}\fnms{Name2 Name2} \snm{Surname2}\ead[label=e2]{second@somewhere.com}}
-and
 \author[B]{\inits{N.-N.}\fnms{Name3-Name3} \snm{Surname3}\ead[label=e3]{third@somewhere.com}}
 \address[A]{Department first, \orgname{University or Company name},
 Abbreviate US states, \cny{Country}\printead[presep={\\}]{e1}}
 \address[B]{Department first, \orgname{University or Company name},
 Abbreviate US states, \cny{Country}\printead[presep={\\}]{e2,e3}}
+\end{aug}
 
 %\begin{review}{editor}
 %\reviewer{\fnms{First} \snm{Editor}\address{\orgname{University or Company name}, \cny{Country}}}
@@ -107,7 +108,7 @@ Abstract text.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\nocite{*} 
+\nocite{*}
 % if your bibliography is in bibtex format, use those commands:
 \bibliographystyle{ios1}           % Style BST file.
 \bibliography{bibliography}        % Bibliography file (usually '*.bib')
