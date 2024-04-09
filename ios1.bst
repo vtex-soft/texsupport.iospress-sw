@@ -1982,7 +1982,7 @@ FUNCTION {initialize.et.al.char.used}
 
 %%%%% setting default options
 FUNCTION {set.default.opt}
-{"unsort" 'list.string :=}
+{"sort" 'list.string :=}
 
 EXECUTE {set.default.opt}
 
